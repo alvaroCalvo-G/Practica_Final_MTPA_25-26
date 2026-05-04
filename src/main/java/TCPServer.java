@@ -3,8 +3,8 @@ import java.io.*;
 public class TCPServer {
 	public static void main (String args[]) {
 		try{
-			int serverPort = 7896; 
-			ServerSocket listenSocket = new ServerSocket(serverPort);
+			int cliente1 = 7896; 
+			ServerSocket listenSocket = new ServerSocket(cliente1);
 			while(true) {
 				Socket clientSocket = listenSocket.accept();
 				Connection c = new Connection(clientSocket);

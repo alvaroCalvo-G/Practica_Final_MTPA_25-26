@@ -1,0 +1,35 @@
+public class Comando {
+    private String comando;
+    private String origen;
+    private String destino;
+    private String datos;
+
+    public Comando(String comando, String origen, String destino, String datos) {
+        this.comando = comando;
+        this.origen = origen;
+        this.destino = destino;
+        this.datos = datos;
+    }
+
+    public String getComando() {
+        return comando;
+    }
+
+    public String getOrigen() {
+        return origen;
+    }
+
+    public String getDestino() {
+        return destino;
+    }
+
+    public String getDatos() {
+        return datos;
+    }
+
+    @Override
+    public String toString() {
+        return comando + "|" + origen + "|" + destino + "|" + datos;
+    }
+}
+ 
