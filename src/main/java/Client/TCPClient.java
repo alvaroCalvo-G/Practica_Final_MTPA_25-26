@@ -4,6 +4,9 @@ import java.net.*;
 import java.io.*;
 public class TCPClient {
 	public static void main (String args[]) {
+                InterfazGraficaCliente IU = new InterfazGraficaCliente();
+                IU.setVisible(true);
+                
 		Socket s = null;
                 Comando cadena = new Comando("comando", "origen", "destino", "datos");
 		try{
