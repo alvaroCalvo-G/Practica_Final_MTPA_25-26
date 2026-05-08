@@ -1,3 +1,5 @@
+package Client;
+
 public class Comando {
     private String comando;
     private String origen;
