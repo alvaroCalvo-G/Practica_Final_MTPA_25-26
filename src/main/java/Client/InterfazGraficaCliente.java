@@ -5,6 +5,7 @@ import Client.TCPClient;
 public class InterfazGraficaCliente extends javax.swing.JFrame {
 
     private TCPClient clienteLogica;
+    private Comando Login = new Comando("LOGIN", "ME", "SERVER", "Datos");
     
     public InterfazGraficaCliente(TCPClient clienteLogica) {
         this.clienteLogica = clienteLogica;
@@ -21,43 +22,84 @@ public class InterfazGraficaCliente extends javax.swing.JFrame {
     private void initComponents() {
 
         jButton1 = new javax.swing.JButton();
+        label3 = new java.awt.Label();
+        jLabel1 = new javax.swing.JLabel();
+        infoConnect = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jButton1.setText("EnviarComando");
+        jButton1.setText("LOGIN");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
 
+        label3.setAlignment(java.awt.Label.CENTER);
+        label3.setText("label3");
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel1.setText("BIENVENIDO A DISCORD");
+        jLabel1.setToolTipText("");
+
+        infoConnect.setText("jLabel2");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(label3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(25, 25, 25))
             .addGroup(layout.createSequentialGroup()
-                .addGap(130, 130, 130)
-                .addComponent(jButton1)
-                .addContainerGap(156, Short.MAX_VALUE))
+                .addGap(139, 139, 139)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 422, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 407, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(150, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(infoConnect, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(43, 43, 43))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(187, Short.MAX_VALUE)
+                .addContainerGap()
+                .addComponent(infoConnect)
+                .addGap(30, 30, 30)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 367, Short.MAX_VALUE)
                 .addComponent(jButton1)
-                .addGap(90, 90, 90))
+                .addGap(18, 18, 18)
+                .addComponent(label3, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
+
+        label3.getAccessibleContext().setAccessibleDescription("");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         if (clienteLogica != null) {
-            Comando cadena = new Comando("comando", "origen", "destino", "datos");
-            clienteLogica.mandarComando(cadena);
+            clienteLogica.mandarComando(Login);
         }
     }//GEN-LAST:event_jButton1ActionPerformed
-
+    
+    public void info(String mensaje) {
+        label3.setText(mensaje);
+    }
+    
+    public void infoConnect(String mensaje) {
+        if(mensaje.equals("Conectado")){
+            infoConnect.setText(mensaje);
+        }else{
+            infoConnect.setForeground(java.awt.Color.BLUE);
+            infoConnect.setText("DESCONECTADO");
+        }
+    }
     /**
      * @param args the command line arguments
      */
@@ -96,6 +138,9 @@ public class InterfazGraficaCliente extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel infoConnect;
     private javax.swing.JButton jButton1;
+    private javax.swing.JLabel jLabel1;
+    private java.awt.Label label3;
     // End of variables declaration//GEN-END:variables
 }

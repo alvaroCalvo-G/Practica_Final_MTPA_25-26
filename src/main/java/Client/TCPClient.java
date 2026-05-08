@@ -8,18 +8,26 @@ public class TCPClient {
     private Socket s = null;
     private DataInputStream in = null;
     private DataOutputStream out = null;
+    private InterfazGraficaCliente vista;
+    
+    public void setVista(InterfazGraficaCliente vista) {
+        this.vista = vista;
+    }
 
     public TCPClient() {
+    }
+
+    public void conectar() {
         try {
             int serverPort = 7896;
             s = new Socket("localhost", serverPort);
             in = new DataInputStream(s.getInputStream());
             out = new DataOutputStream(s.getOutputStream());
-            System.out.println("Conectado al servidor.");
+            if (vista != null) vista.infoConnect("Conectado");
         } catch (UnknownHostException e) {
-            System.out.println("Socket:" + e.getMessage());
+            if (vista != null) vista.info("Socket:" + e.getMessage());
         } catch (IOException e) {
-            System.out.println("IO:" + e.getMessage());
+            if (vista != null) vista.info("IO:" + e.getMessage());
         }
     }
 
@@ -27,17 +35,15 @@ public class TCPClient {
         if (out != null && in != null) {
             try {
                 out.writeUTF(cadena.toString());
-
                 String data = in.readUTF();
-                System.out.println("Received: " + data);
-
+                if (vista != null) vista.info("Servidor: " + data);
             } catch (EOFException e) {
-                System.out.println("EOF:" + e.getMessage());
+                if (vista != null) vista.info("EOF:" + e.getMessage());
             } catch (IOException e) {
-                System.out.println("readline:" + e.getMessage());
+                if (vista != null) vista.info("readline:" + e.getMessage());
             }
         } else {
-            System.out.println("Error: No hay conexión con el servidor.");
+            if (vista != null) vista.info("Error: No hay conexión con el servidor.");
         }
     }
     
@@ -46,15 +52,18 @@ public class TCPClient {
             try {
                 s.close();
             } catch (IOException e) {
-                System.out.println("close:" + e.getMessage());
+                if (vista != null) vista.info("close:" + e.getMessage());
             }
         }
     }
     
     public static void main(String args[]) {
-        TCPClient clienteLogica = new TCPClient();
+        TCPClient cliente = new TCPClient();
+        InterfazGraficaCliente iu = new InterfazGraficaCliente(cliente);
+    
+        cliente.setVista(iu);
+        cliente.conectar(); 
         
-        InterfazGraficaCliente IU = new InterfazGraficaCliente(clienteLogica);
-        IU.setVisible(true);
+        iu.setVisible(true);
     }
 }
