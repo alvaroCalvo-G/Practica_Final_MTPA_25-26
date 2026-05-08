@@ -1,10 +1,12 @@
+package Server;
+
 import java.net.*;
 import java.io.*;
 public class TCPServer {
 	public static void main (String args[]) {
 		try{
-			int serverPort = 7896; 
-			ServerSocket listenSocket = new ServerSocket(serverPort);
+			int cliente1 = 7896; 
+			ServerSocket listenSocket = new ServerSocket(cliente1);
 			while(true) {
 				Socket clientSocket = listenSocket.accept();
 				Connection c = new Connection(clientSocket);
@@ -27,7 +29,7 @@ class Connection extends Thread {
 	public void run(){
 		try {			                 
 			String data = in.readUTF();	                  
-			out.writeUTF(data);
+			System.out.println(data);
 		}catch (EOFException e){System.out.println("EOF:"+e.getMessage());
 		} catch(IOException e) {System.out.println("readline:"+e.getMessage());
 		} finally{ try {clientSocket.close();}catch (IOException e){/*close failed*/}}

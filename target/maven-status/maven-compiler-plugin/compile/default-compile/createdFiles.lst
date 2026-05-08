@@ -1,3 +1,7 @@
-TCPClient.class
-Connection.class
-TCPServer.class
+Client\InterfazGraficaCliente$2.class
+Client\TCPClient.class
+Server\Connection.class
+Client\InterfazGraficaCliente.class
+Client\InterfazGraficaCliente$1.class
+Server\TCPServer.class
+Client\Comando.class
