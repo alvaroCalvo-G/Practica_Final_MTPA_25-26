@@ -52,7 +52,10 @@ public class InterfazGraficaCliente extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        
+        if (clienteLogica != null) {
+            Comando cadena = new Comando("comando", "origen", "destino", "datos");
+            clienteLogica.mandarComando(cadena);
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
