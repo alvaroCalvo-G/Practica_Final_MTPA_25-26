@@ -29,7 +29,7 @@ class Connection extends Thread {
 	public void run(){
 		try {			                 
 			String data = in.readUTF();	                  
-			out.writeUTF(data);
+			System.out.println(data);
 		}catch (EOFException e){System.out.println("EOF:"+e.getMessage());
 		} catch(IOException e) {System.out.println("readline:"+e.getMessage());
 		} finally{ try {clientSocket.close();}catch (IOException e){/*close failed*/}}

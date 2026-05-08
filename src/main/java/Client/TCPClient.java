@@ -2,21 +2,68 @@ package Client;
 
 import java.net.*;
 import java.io.*;
+
 public class TCPClient {
-	public static void main (String args[]) {
-		Socket s = null;
-                Comando cadena = new Comando("comando", "origen", "destino", "datos");
-		try{
-			int serverPort = 7896;
-			s = new Socket("localhost", serverPort);    
-			DataInputStream in = new DataInputStream( s.getInputStream());
-			DataOutputStream out =new DataOutputStream( s.getOutputStream());
-			out.writeUTF(cadena.toString());      	
-			String data = in.readUTF();	
-			System.out.println("Received: "+ data) ; 
-		}catch (UnknownHostException e){System.out.println("Socket:"+e.getMessage());
-		}catch (EOFException e){System.out.println("EOF:"+e.getMessage());
-		}catch (IOException e){System.out.println("readline:"+e.getMessage());
-		}finally {if(s!=null) try {s.close();}catch (IOException e){System.out.println("close:"+e.getMessage());}}
-     }
+
+    private Socket s = null;
+    private DataInputStream in = null;
+    private DataOutputStream out = null;
+    private InterfazGraficaCliente vista;
+    
+    public void setVista(InterfazGraficaCliente vista) {
+        this.vista = vista;
+    }
+
+    public TCPClient() {
+    }
+
+    public void conectar() {
+        try {
+            int serverPort = 7896;
+            s = new Socket("localhost", serverPort);
+            in = new DataInputStream(s.getInputStream());
+            out = new DataOutputStream(s.getOutputStream());
+            if (vista != null) vista.infoConnect("Conectado");
+        } catch (UnknownHostException e) {
+            if (vista != null) vista.info("Socket:" + e.getMessage());
+        } catch (IOException e) {
+            if (vista != null) vista.info("IO:" + e.getMessage());
+        }
+    }
+
+    public void mandarComando(Comando cadena) {
+        if (out != null && in != null) {
+            try {
+                out.writeUTF(cadena.toString());
+                String data = in.readUTF();
+                if (vista != null) vista.info("Servidor: " + data);
+            } catch (EOFException e) {
+                if (vista != null) vista.info("EOF:" + e.getMessage());
+            } catch (IOException e) {
+                if (vista != null) vista.info("readline:" + e.getMessage());
+            }
+        } else {
+            if (vista != null) vista.info("Error: No hay conexión con el servidor.");
+        }
+    }
+    
+    public void cerrarConexion() {
+        if (s != null) {
+            try {
+                s.close();
+            } catch (IOException e) {
+                if (vista != null) vista.info("close:" + e.getMessage());
+            }
+        }
+    }
+    
+    public static void main(String args[]) {
+        TCPClient cliente = new TCPClient();
+        InterfazGraficaCliente iu = new InterfazGraficaCliente(cliente);
+    
+        cliente.setVista(iu);
+        cliente.conectar(); 
+        
+        iu.setVisible(true);
+    }
 }
