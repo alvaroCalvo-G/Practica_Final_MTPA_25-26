@@ -1,7 +1,8 @@
-Client\InterfazGraficaCliente$2.class
+Client\InterfazGraficaInicio$3.class
+Client\InterfazGraficaInicio$1.class
 Client\TCPClient.class
 Server\Connection.class
-Client\InterfazGraficaCliente.class
-Client\InterfazGraficaCliente$1.class
 Server\TCPServer.class
 Client\Comando.class
+Client\InterfazGraficaInicio.class
+Client\InterfazGraficaInicio$2.class
