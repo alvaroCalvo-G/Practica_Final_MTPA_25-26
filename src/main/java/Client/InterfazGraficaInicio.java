@@ -8,15 +8,12 @@ import java.util.logging.Logger;
 public class InterfazGraficaInicio extends javax.swing.JFrame {
 
     private TCPClient clienteLogica;
-    private Comando LOG = new Comando("LOG", "origen", "destino", "datos");
     private Comando REG = new Comando("REG", "origen", "destino", "datos");
-    
-    public InterfazGraficaInicio(TCPClient clienteLogica){
+
+    public InterfazGraficaInicio(TCPClient clienteLogica) {
         this.clienteLogica = clienteLogica;
         initComponents();
     }
-    
-   
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -47,7 +44,9 @@ public class InterfazGraficaInicio extends javax.swing.JFrame {
         Banner.setToolTipText("");
 
         infoConnect.setForeground(new java.awt.Color(255, 0, 0));
+        infoConnect.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         infoConnect.setText("Desconectado");
+        infoConnect.setToolTipText("");
 
         Registro.setText("REGISTER");
         Registro.addActionListener(new java.awt.event.ActionListener() {
@@ -90,9 +89,10 @@ public class InterfazGraficaInicio extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void LoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoginActionPerformed
-        if (clienteLogica != null) {
-            clienteLogica.mandarComando(LOG);
-        }
+        InterfazGraficaLogin logIn = new InterfazGraficaLogin(clienteLogica);
+
+        logIn.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_LoginActionPerformed
 
     private void RegistroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RegistroActionPerformed
@@ -100,18 +100,19 @@ public class InterfazGraficaInicio extends javax.swing.JFrame {
             clienteLogica.mandarComando(REG);
         }
     }//GEN-LAST:event_RegistroActionPerformed
-    
+
     public void info(String mensaje) {
         //label3.setText(mensaje);
         System.out.println(mensaje);
     }
-    
+
     public void infoConnect(String mensaje) {
-        if(mensaje.equals("Conectado")){
+        if (mensaje.equals("Conectado")) {
             infoConnect.setText(mensaje);
             infoConnect.setForeground(new java.awt.Color(0, 255, 0));
         }
     }
+
     /**
      * @param args the command line arguments
      */
@@ -143,7 +144,7 @@ public class InterfazGraficaInicio extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                TCPClient cliente = new TCPClient(); 
+                TCPClient cliente = new TCPClient();
                 new InterfazGraficaInicio(cliente).setVisible(true);
             }
         });

@@ -47,10 +47,6 @@ public class TCPClient {
         if (out != null && in != null) {
             try {
                 out.writeUTF(cadena.toString());
-                String data = in.readUTF();
-                if (vista != null) {
-                    vista.info("Servidor: " + data);
-                }
             } catch (EOFException e) {
                 if (vista != null) {
                     vista.info("EOF:" + e.getMessage());
