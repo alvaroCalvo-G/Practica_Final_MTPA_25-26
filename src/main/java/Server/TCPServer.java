@@ -42,7 +42,7 @@ class Connection extends Thread {
                 String instrucciones = in.readUTF();
                 System.out.println(instrucciones);
 
-                String[] data = null;
+                String[] data = instrucciones.split("|");
 
                 String comando = data[0];
                 String origen = data[1];
@@ -50,11 +50,12 @@ class Connection extends Thread {
                 String datos = data[3];
 
                 if (comando.equals("LOGIN")) {
-                    String[] UandP = null;
+                    String[] UandP = instrucciones.split("/");
 
                     String usuario = UandP[0];
                     String password = UandP[1];
-
+                    
+                    
                 }
 
             }
