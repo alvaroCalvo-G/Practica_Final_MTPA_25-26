@@ -80,10 +80,10 @@ class Connection extends Thread {
 
                             if (loginExitoso) {
                                 System.out.println("Login correcto para: " + usuario);
-                                out.writeUTF("SUCCESS|Login exitoso");
+                                out.writeUTF("LOGIN_OK|Servidor|Cliente|Login exitoso");
                             } else {
                                 System.out.println("Login fallido para: " + usuario);
-                                out.writeUTF("ERROR|Usuario o contraseña incorrectos");
+                                out.writeUTF("LOGIN_INCORRECTO|Servidor|Cliente|Usuario o contraseña incorrectos");
                             }
                         } else {
                             System.out.println("Error: El formato de usuario/contraseña no es válido.");
