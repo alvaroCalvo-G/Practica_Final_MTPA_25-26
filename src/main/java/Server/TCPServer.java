@@ -1,7 +1,9 @@
 package Server;
 
+import Client.LectorCSV;
 import java.net.*;
 import java.io.*;
+import java.util.List;
 
 public class TCPServer {
 
@@ -40,24 +42,56 @@ class Connection extends Thread {
         try {
             while (true) {
                 String instrucciones = in.readUTF();
-                System.out.println(instrucciones);
+                System.out.println("Recibido: " + instrucciones);
 
-                String[] data = instrucciones.split("|");
+                String[] data = instrucciones.split("\\|");
 
-                String comando = data[0];
-                String origen = data[1];
-                String destino = data[2];
-                String datos = data[3];
+                if (data.length >= 4) {
+                    String comando = data[0];
+                    String origen = data[1];
+                    String destino = data[2];
+                    String datos = data[3];
 
-                if (comando.equals("LOGIN")) {
-                    String[] UandP = instrucciones.split("/");
+                    if (comando.equals("LOGIN")) {
 
-                    String usuario = UandP[0];
-                    String password = UandP[1];
-                    
-                    
+                        String[] UandP = datos.split("/");
+
+                        if (UandP.length == 2) {
+                            String usuario = UandP[0];
+                            String password = UandP[1];
+
+                            System.out.println("Usuario: " + usuario);
+                            System.out.println("Password: " + password);
+
+                            String ruta = "usuarios.csv";
+                            List<String[]> listaDeDatos = LectorCSV.leerDatos(ruta);
+
+                            boolean loginExitoso = false;
+
+                            for (String[] fila : listaDeDatos) {
+                                String userCSV = fila[0].trim();
+                                String passCSV = fila[1].trim();
+
+                                if (userCSV.equals(usuario) && passCSV.equals(password)) {
+                                    loginExitoso = true;
+                                    break;
+                                }
+                            }
+
+                            if (loginExitoso) {
+                                System.out.println("Login correcto para: " + usuario);
+                                out.writeUTF("SUCCESS|Login exitoso");
+                            } else {
+                                System.out.println("Login fallido para: " + usuario);
+                                out.writeUTF("ERROR|Usuario o contraseña incorrectos");
+                            }
+                        } else {
+                            System.out.println("Error: El formato de usuario/contraseña no es válido.");
+                        }
+                    }
+                } else {
+                    System.out.println("Error: La trama recibida está incompleta.");
                 }
-
             }
         } catch (EOFException e) {
             System.out.println("EOF:" + e.getMessage());
@@ -66,7 +100,7 @@ class Connection extends Thread {
         } finally {
             try {
                 clientSocket.close();
-            } catch (IOException e) {/*close failed*/
+            } catch (IOException e) {
             }
         }
     }
