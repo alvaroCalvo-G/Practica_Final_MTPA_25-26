@@ -11,5 +11,6 @@ Client\LectorCSV.class
 Client\InterfazGraficaInicio$1.class
 Client\InterfazGraficaLogin$4.class
 Client\InterfazGraficaLogin$1.class
+Client\TCPClient$1.class
 Client\InterfazGraficaLogin$5.class
 Client\InterfazGraficaLogin.class

@@ -9,6 +9,7 @@ public class TCPClient {
     private DataInputStream in = null;
     private DataOutputStream out = null;
     private InterfazGraficaInicio vista;
+    private InterfazGraficaLogin IULog;
 
     private String estado = null;
 
@@ -28,6 +29,12 @@ public class TCPClient {
             if (vista != null) {
                 vista.infoConnect("Conectado");
             }
+            if (IULog != null) {
+                IULog.infoConnect("Conectado");
+            }
+
+            iniciarEscucha();
+
         } catch (UnknownHostException e) {
             if (vista != null) {
                 vista.info("Socket:" + e.getMessage());
@@ -36,6 +43,54 @@ public class TCPClient {
             if (vista != null) {
                 vista.info("IO:" + e.getMessage());
             }
+        }
+    }
+
+    public void iniciarEscucha() {
+        Thread hiloEscucha = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    while (true) {
+                        String respuesta = in.readUTF();
+
+                        procesarRespuesta(respuesta);
+                    }
+                } catch (IOException e) {
+                    if (vista != null) {
+                        vista.info("Conexión con el servidor terminada.");
+                    }
+                }
+            }
+        });
+        hiloEscucha.start();
+    }
+
+    public void setIULog(InterfazGraficaLogin IULog) {
+        this.IULog = IULog;
+    }
+
+    private void procesarRespuesta(String respuesta) {
+        System.out.println("Mensaje del servidor: " + respuesta);
+
+        switch (respuesta) {
+            case "LOGIN_OK":
+                if (IULog != null) {
+                    IULog.statusLog("ACCESO CONCEDIDO: " + respuesta);
+                }
+                break;
+            case "LOGIN_INCORRECTO":
+                if (IULog != null) {
+                    IULog.statusLog("FALLO: " + respuesta);
+                }
+                break;
+
+            default:
+                System.out.println("Comando del servidor no reconocido: " + respuesta);
+                if (IULog != null) {
+                    IULog.statusLog("Respuesta: " + respuesta);
+                }
+                break;
         }
     }
 
@@ -81,7 +136,7 @@ public class TCPClient {
 
         cliente.setVista(iu);
         iu.setVisible(true);
-        
+
         cliente.conectar();
     }
 }

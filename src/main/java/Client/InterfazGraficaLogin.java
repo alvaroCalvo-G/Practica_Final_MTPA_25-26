@@ -1,8 +1,6 @@
 
 package Client;
 
-import java.util.HashSet;
-
 public class InterfazGraficaLogin extends javax.swing.JFrame {
 
     private TCPClient clienteLogica;
@@ -12,6 +10,7 @@ public class InterfazGraficaLogin extends javax.swing.JFrame {
     
     public InterfazGraficaLogin(TCPClient clienteLogica){
         this.clienteLogica = clienteLogica;
+        this.clienteLogica.setIULog(this);
         initComponents();
     }
     
@@ -39,6 +38,7 @@ public class InterfazGraficaLogin extends javax.swing.JFrame {
         BannerPassword = new javax.swing.JLabel();
         Confirmacion = new javax.swing.JButton();
         PasswordText = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -84,6 +84,8 @@ public class InterfazGraficaLogin extends javax.swing.JFrame {
             }
         });
 
+        jLabel2.setText("jLabel2");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -114,7 +116,10 @@ public class InterfazGraficaLogin extends javax.swing.JFrame {
                         .addGap(27, 27, 27)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(usuarioText, javax.swing.GroupLayout.DEFAULT_SIZE, 301, Short.MAX_VALUE)
-                            .addComponent(PasswordText))))
+                            .addComponent(PasswordText)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(259, 259, 259)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(263, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -134,7 +139,9 @@ public class InterfazGraficaLogin extends javax.swing.JFrame {
                     .addComponent(PasswordText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(69, 69, 69)
                 .addComponent(Confirmacion)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 215, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 61, Short.MAX_VALUE)
+                .addComponent(jLabel2)
+                .addGap(138, 138, 138)
                 .addComponent(home)
                 .addGap(26, 26, 26))
         );
@@ -176,6 +183,11 @@ public class InterfazGraficaLogin extends javax.swing.JFrame {
 
     private String datos(){
         return datosU + "/" + datosC;
+    }
+    
+    public void statusLog(String mensaje) {
+        jLabel2.setText(mensaje);
+        System.out.println(mensaje);
     }
     /**
      * @param args the command line arguments
@@ -221,6 +233,7 @@ public class InterfazGraficaLogin extends javax.swing.JFrame {
     private javax.swing.JTextField PasswordText;
     private javax.swing.JButton home;
     private javax.swing.JLabel infoConnect;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JTextField usuarioText;
     // End of variables declaration//GEN-END:variables
 }

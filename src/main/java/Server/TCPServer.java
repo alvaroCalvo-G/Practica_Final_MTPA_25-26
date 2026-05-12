@@ -41,6 +41,7 @@ class Connection extends Thread {
     public void run() {
         try {
             while (true) {
+                //Inyecion de dependencias
                 String instrucciones = in.readUTF();
                 System.out.println("Recibido: " + instrucciones);
 
@@ -80,10 +81,10 @@ class Connection extends Thread {
 
                             if (loginExitoso) {
                                 System.out.println("Login correcto para: " + usuario);
-                                out.writeUTF("LOGIN_OK|Servidor|Cliente|Login exitoso");
+                                out.writeUTF("LOGIN_OK");
                             } else {
                                 System.out.println("Login fallido para: " + usuario);
-                                out.writeUTF("LOGIN_INCORRECTO|Servidor|Cliente|Usuario o contraseña incorrectos");
+                                out.writeUTF("LOGIN_INCORRECTO");
                             }
                         } else {
                             System.out.println("Error: El formato de usuario/contraseña no es válido.");
