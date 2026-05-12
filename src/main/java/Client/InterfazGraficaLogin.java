@@ -189,6 +189,13 @@ public class InterfazGraficaLogin extends javax.swing.JFrame {
         jLabel2.setText(mensaje);
         System.out.println(mensaje);
     }
+    
+    public void logOk(){
+        InterfazGraficaPrincipal p = new InterfazGraficaPrincipal(clienteLogica);
+
+        p.setVisible(true);
+        this.dispose();
+    }
     /**
      * @param args the command line arguments
      */

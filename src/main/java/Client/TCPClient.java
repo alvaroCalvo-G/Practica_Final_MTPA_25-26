@@ -77,6 +77,7 @@ public class TCPClient {
             case "LOGIN_OK":
                 if (IULog != null) {
                     IULog.statusLog("ACCESO CONCEDIDO: " + respuesta);
+                    IULog.logOk();
                 }
                 break;
             case "LOGIN_INCORRECTO":

@@ -1,8 +1,10 @@
+Client\InterfazGraficaPrincipal$1.class
 Client\TCPClient.class
 Server\Connection.class
 Server\TCPServer.class
 Client\Comando.class
 Client\InterfazGraficaInicio.class
+Client\InterfazGraficaPrincipal.class
 Client\InterfazGraficaInicio$2.class
 Client\InterfazGraficaLogin$3.class
 Client\InterfazGraficaInicio$3.class
