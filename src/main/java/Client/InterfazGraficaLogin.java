@@ -38,7 +38,7 @@ public class InterfazGraficaLogin extends javax.swing.JFrame {
         BannerPassword = new javax.swing.JLabel();
         Confirmacion = new javax.swing.JButton();
         PasswordText = new javax.swing.JTextField();
-        jLabel2 = new javax.swing.JLabel();
+        infoName = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -84,7 +84,8 @@ public class InterfazGraficaLogin extends javax.swing.JFrame {
             }
         });
 
-        jLabel2.setText("jLabel2");
+        infoName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        infoName.setText("INFO...");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -118,8 +119,8 @@ public class InterfazGraficaLogin extends javax.swing.JFrame {
                             .addComponent(usuarioText, javax.swing.GroupLayout.DEFAULT_SIZE, 301, Short.MAX_VALUE)
                             .addComponent(PasswordText)))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(259, 259, 259)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(271, 271, 271)
+                        .addComponent(infoName, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(263, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -140,7 +141,7 @@ public class InterfazGraficaLogin extends javax.swing.JFrame {
                 .addGap(69, 69, 69)
                 .addComponent(Confirmacion)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 61, Short.MAX_VALUE)
-                .addComponent(jLabel2)
+                .addComponent(infoName)
                 .addGap(138, 138, 138)
                 .addComponent(home)
                 .addGap(26, 26, 26))
@@ -186,9 +187,19 @@ public class InterfazGraficaLogin extends javax.swing.JFrame {
     }
     
     public void statusLog(String mensaje) {
-        jLabel2.setText(mensaje);
+        infoName.setText(mensaje);
         System.out.println(mensaje);
     }
+    
+    public void redInfoLabel(){
+        infoName.setForeground(new java.awt.Color(255, 0, 0));
+    }
+    
+    public void greenInfoLabel(){
+        infoName.setForeground(new java.awt.Color(0, 255, 0));
+    }
+    
+    
     
     public void logOk(){
         InterfazGraficaPrincipal p = new InterfazGraficaPrincipal(clienteLogica);
@@ -240,7 +251,7 @@ public class InterfazGraficaLogin extends javax.swing.JFrame {
     private javax.swing.JTextField PasswordText;
     private javax.swing.JButton home;
     private javax.swing.JLabel infoConnect;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel infoName;
     private javax.swing.JTextField usuarioText;
     // End of variables declaration//GEN-END:variables
 }

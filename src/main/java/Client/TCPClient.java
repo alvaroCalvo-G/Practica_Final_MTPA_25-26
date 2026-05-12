@@ -76,13 +76,15 @@ public class TCPClient {
         switch (respuesta) {
             case "LOGIN_OK":
                 if (IULog != null) {
-                    IULog.statusLog("ACCESO CONCEDIDO: " + respuesta);
+                    IULog.statusLog("Acceso correcto");
+                    IULog.greenInfoLabel();
                     IULog.logOk();
                 }
                 break;
             case "LOGIN_INCORRECTO":
                 if (IULog != null) {
-                    IULog.statusLog("FALLO: " + respuesta);
+                    IULog.statusLog("Login incorrecto");
+                    IULog.redInfoLabel();
                 }
                 break;
 
