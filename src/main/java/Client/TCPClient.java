@@ -151,8 +151,12 @@ public class TCPClient {
                     String clave = respuesta.split("\\|")[1];
                     IUReg.infoBannerChange("Registro exitoso. Tu clave es: " + clave);
                     IUReg.infoBannerGreen();
-                }if(respuesta.startsWith("LIST_ROOMS_OK")){
-                    
+                }else if(respuesta.startsWith("LIST_ROOMS_OK")){
+                    String[] partes = respuesta.split("\\|");
+                    String[] salones = partes[1].split("/");
+                    if (IUMain != null) {
+                        IUMain.actualizarSalones(salones);
+                    }
                 }else {
                     notificarTodos("Respuesta: " + respuesta);
                 }

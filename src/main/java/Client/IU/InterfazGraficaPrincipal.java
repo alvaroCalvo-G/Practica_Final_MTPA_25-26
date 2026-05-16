@@ -90,12 +90,20 @@ public class InterfazGraficaPrincipal extends javax.swing.JFrame implements Info
         boolean visible = jScrollPane1.isVisible();
         jScrollPane1.setVisible(!visible);
         botonLista.setText(visible ? "Mostrar lista" : "Ocultar lista");
-        
+
         if (!visible) {
             clienteLogica.mandarComando(MostrarRooms);
         }
 
     }//GEN-LAST:event_botonListaActionPerformed
+
+    public void actualizarSalones(String[] salones) {
+        javax.swing.DefaultListModel<String> modelo = new javax.swing.DefaultListModel<>();
+        for (String salon : salones) {
+            modelo.addElement(salon);
+        }
+        Lista.setModel(modelo);
+    }
 
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -121,4 +129,5 @@ public class InterfazGraficaPrincipal extends javax.swing.JFrame implements Info
     private javax.swing.JButton botonLista;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
+
 }

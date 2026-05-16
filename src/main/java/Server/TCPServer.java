@@ -189,7 +189,7 @@ class Connection extends Thread {
                                     String[] salones = LectorCSVColumna.leerColumna("salones.csv", 0);
                                     String rooms;
                                     rooms = String.join("/", salones);
-                                    out.writeUTF("LIST_ROOMS_OK|" + datos);
+                                    out.writeUTF("LIST_ROOMS_OK|" + rooms);
                                 }
                                 case "JOIN" -> {
 
