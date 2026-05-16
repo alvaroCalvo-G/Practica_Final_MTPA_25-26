@@ -136,7 +136,7 @@ public class TCPClient {
                 IUReg.infoBannerChange("El nombre de usuario ya está en uso.");
                 IUReg.infoBannerRed();
             }
-
+     
             default -> {
                 if (respuesta.startsWith("REG_OK")) {
                     String clave = respuesta.split("\\|")[1];

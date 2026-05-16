@@ -119,7 +119,7 @@ class Connection extends Thread {
                                     if (usuarioExiste) {
                                         out.writeUTF("USUARIO_YA_EXISTE");
                                     } else {
-                                        String clave = GeneradorClave.generarClave(ruta,userName);
+                                        String clave = GeneradorClave.generarClave(ruta, userName);
                                         List<String[]> nuevoUsuario = new ArrayList<>();
                                         nuevoUsuario.add(new String[]{userName, clave});
                                         EscritorCSV.escribirDatos(ruta, nuevoUsuario, true);
@@ -134,10 +134,37 @@ class Connection extends Thread {
                         case AUTENTIFICADO -> {
                             switch (comando) {
                                 case "LOGOUT" -> {
+                                    out.writeUTF("LOGOUT_OK");
+                                    estado = Estados.CONECTADO;
+                                }
+                                case "LIST_DROOMS" -> {
                                     
                                 }
-
+                                case "JOIN" -> {
+                                    
+                                }
+                                case "LEAVE" -> {
+                                    
+                                }
+                                case "MSG" -> {
+                                    //Cuidado con datos
+                                }
+                                case "MD" -> {
+                                    
+                                }
+                                case "HB" -> {
+                                    
+                                }
+                                case "NOTIFY" -> {
+                                    
+                                }
+                                case "REQ_HISTORY" -> {
+                                    
+                                }
                             }
+                        }
+                        case DESCONECTADO -> {
+                            clientSocket.close();
                         }
                     }
                 } else {
