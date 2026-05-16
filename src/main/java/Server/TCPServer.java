@@ -91,6 +91,11 @@ class Connection extends Thread {
                                 out.writeUTF("FORMATO_INVALIDO");
                             }
                         }
+                        case "REG" -> {
+                            String userName = datos;
+                            
+                            
+                        }
                     }
                 } else {
                     System.out.println("Error: La información recibida está incompleta.");

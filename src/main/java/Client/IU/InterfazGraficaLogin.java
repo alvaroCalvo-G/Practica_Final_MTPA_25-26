@@ -9,13 +9,14 @@ public class InterfazGraficaLogin extends javax.swing.JFrame implements Informac
 
     private TCPClient clienteLogica;
     private Comando LOG = new Comando("LOGIN", "CLIENTE", "SERVIDOR", null);
-    
+
     private String datosU = null;
     private String datosC = null;
 
     public InterfazGraficaLogin(TCPClient clienteLogica) {
         this.clienteLogica = clienteLogica;
         initComponents();
+        clienteLogica.setIULog(this);
 
         clienteLogica.addListener(this);
 

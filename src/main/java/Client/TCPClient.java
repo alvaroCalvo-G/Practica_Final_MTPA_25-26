@@ -2,6 +2,7 @@ package Client;
 
 import Client.IU.InterfazGraficaInicio;
 import Client.IU.InterfazGraficaLogin;
+import Client.IU.InterfazGraficaRegistro;
 import Client.Intefaces.Informacion;
 import java.net.*;
 import java.io.*;
@@ -16,7 +17,16 @@ public class TCPClient {
 
     private InterfazGraficaInicio IUInicio;
     private InterfazGraficaLogin IULog;
+    private InterfazGraficaRegistro IUReg;
 
+    public void setIULog(InterfazGraficaLogin IULog) {
+        this.IULog = IULog;
+    }
+
+    public void setIUReg(InterfazGraficaRegistro IUReg) {
+        this.IUReg = IUReg;
+    }
+    
     private List<Informacion> generales = new ArrayList<>();
 
     public void addListener(Informacion listener) {
@@ -70,7 +80,7 @@ public class TCPClient {
         });
         hiloEscucha.start();
     }
-    
+
     public void mandarComando(Comando cadena) {
         if (out != null && in != null) {
             try {
@@ -84,7 +94,7 @@ public class TCPClient {
             notificarTodos("Error: No hay conexión con el servidor.");
         }
     }
-    
+
     public void cerrarConexion() {
         if (s != null) {
             try {
