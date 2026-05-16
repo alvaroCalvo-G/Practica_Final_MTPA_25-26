@@ -6,18 +6,45 @@ import java.net.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class TCPServer {
 
-    public static void main(String args[]) {
-        try {
-            int cliente1 = 7896;
+    public static boolean aceptarClientes = true;
+    public static boolean mantenimiento = false;
 
-            ServerSocket listenSocket1 = new ServerSocket(cliente1);
+    public static void main(String args[]) {
+        Scanner sc = new Scanner(System.in);
+
+        try {
+            int puerto = 7896;
+            ServerSocket listenSocket = new ServerSocket(puerto);
+            System.out.println("[Servidor] Iniciando en el puerto " + puerto);
+
+            new Thread(() -> {
+                try {
+                    while (true) {
+                        Socket clientSocket = listenSocket.accept();
+                        if (aceptarClientes) {
+                            new Connection(clientSocket);
+                        } else {
+                            clientSocket.close();
+                            System.out.println("[Servidor] Conexion rechazada: servidor cerrado");
+                        }
+                    }
+                } catch (IOException e) {
+                    System.out.println("Listen socket: " + e.getMessage());
+                }
+            }).start();
 
             while (true) {
-                Socket clientSocket = listenSocket1.accept();
-                Connection c = new Connection(clientSocket);
+                String entrada = sc.nextLine();
+                
+                switch (entrada) {
+                    case "stop" -> {
+                    }
+                    default -> System.out.println("Posibles comando: stop | start | mant on | mant off");
+                }
             }
         } catch (IOException e) {
             System.out.println("Listen socket:" + e.getMessage());
@@ -138,28 +165,28 @@ class Connection extends Thread {
                                     estado = Estados.CONECTADO;
                                 }
                                 case "LIST_DROOMS" -> {
-                                    
+
                                 }
                                 case "JOIN" -> {
-                                    
+
                                 }
                                 case "LEAVE" -> {
-                                    
+
                                 }
                                 case "MSG" -> {
                                     //Cuidado con datos
                                 }
                                 case "MD" -> {
-                                    
+
                                 }
                                 case "HB" -> {
-                                    
+
                                 }
                                 case "NOTIFY" -> {
-                                    
+
                                 }
                                 case "REQ_HISTORY" -> {
-                                    
+
                                 }
                             }
                         }
