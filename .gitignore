@@ -1,0 +1,21 @@
+# Claude Code session files
+.claude/
+
+# NetBeans
+nbproject/private/
+nbproject/Makefile-*.mk
+nbproject/Package-*.bash
+build/
+target/
+nbbuild/
+dist/
+nbdist/
+
+# Java
+*.class
+*.jar
+*.war
+*.ear
+
+# Logs
+*.log
