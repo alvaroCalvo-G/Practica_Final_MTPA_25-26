@@ -26,10 +26,10 @@ public class TCPServer {
 }
 
 class Connection extends Thread {
-
     DataInputStream in;
     DataOutputStream out;
     Socket clientSocket;
+    Estados estado = Estados.CONECTADO;
 
     public Connection(Socket aClientSocket) {
         try {
