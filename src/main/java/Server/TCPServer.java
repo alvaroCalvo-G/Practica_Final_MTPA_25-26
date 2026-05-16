@@ -26,6 +26,7 @@ public class TCPServer {
 }
 
 class Connection extends Thread {
+
     DataInputStream in;
     DataOutputStream out;
     Socket clientSocket;
@@ -58,68 +59,75 @@ class Connection extends Thread {
                     String destino = data[2];
                     String datos = data[3];
 
-                    switch (comando) {
-                        case "LOGIN" -> {
-                            String[] UandP = datos.split("/");
+                    switch (estado) {
+                        case CONECTADO -> {
+                            switch (comando) {
+                                case "LOGIN" -> {
+                                    String[] UandP = datos.split("/");
 
-                            if (UandP.length == 2) {
-                                String usuario = UandP[0];
-                                String password = UandP[1];
+                                    if (UandP.length == 2) {
+                                        String usuario = UandP[0];
+                                        String password = UandP[1];
 
-                                String ruta = "usuarios.csv";
-                                List<String[]> listaDeDatos = LectorCSV.leerDatos(ruta);
+                                        String ruta = "usuarios.csv";
+                                        List<String[]> listaDeDatos = LectorCSV.leerDatos(ruta);
 
-                                boolean loginExitoso = false;
+                                        boolean loginExitoso = false;
 
-                                for (String[] fila : listaDeDatos) {
-                                    if (fila.length < 2) {
-                                        continue;
+                                        for (String[] fila : listaDeDatos) {
+                                            if (fila.length < 2) {
+                                                continue;
+                                            }
+
+                                            String userCSV = fila[0].trim();
+                                            String passCSV = fila[1].trim();
+
+                                            if (userCSV.equals(usuario) && passCSV.equals(password)) {
+                                                loginExitoso = true;
+                                                break;
+                                            }
+                                        }
+
+                                        if (loginExitoso) {
+                                            System.out.println("Login correcto para: " + usuario);
+                                            out.writeUTF("LOGIN_OK");
+                                        } else {
+                                            System.out.println("Login fallido para: " + usuario);
+                                            out.writeUTF("LOGIN_INCORRECTO");
+                                        }
+                                    } else {
+                                        System.out.println("Error: formato usuario/contraseña no válido.");
+                                        out.writeUTF("FORMATO_INVALIDO");
+                                    }
+                                }
+                                case "REG" -> {
+                                    String userName = datos;
+
+                                    String ruta = "usuarios.csv";
+                                    List<String[]> usuarios = LectorCSV.leerDatos(ruta);
+
+                                    boolean usuarioExiste = false;
+
+                                    for (String[] fila : usuarios) {
+                                        if (fila[0].trim().equals(userName)) {
+                                            usuarioExiste = true;
+                                            break;
+                                        }
                                     }
 
-                                    String userCSV = fila[0].trim();
-                                    String passCSV = fila[1].trim();
-
-                                    if (userCSV.equals(usuario) && passCSV.equals(password)) {
-                                        loginExitoso = true;
-                                        break;
+                                    if (usuarioExiste) {
+                                        out.writeUTF("USUARIO_YA_EXISTE");
+                                    } else {
+                                        String clave = GeneradorClave.generarClave(ruta);
+                                        List<String[]> nuevoUsuario = new ArrayList<>();
+                                        nuevoUsuario.add(new String[]{userName, clave});
+                                        EscritorCSV.escribirDatos(ruta, nuevoUsuario, true);
+                                        out.writeUTF("REG_OK|" + clave);
                                     }
                                 }
-
-                                if (loginExitoso) {
-                                    System.out.println("Login correcto para: " + usuario);
-                                    out.writeUTF("LOGIN_OK");
-                                } else {
-                                    System.out.println("Login fallido para: " + usuario);
-                                    out.writeUTF("LOGIN_INCORRECTO");
+                                default -> {
+                                    out.writeUTF("NO_AUTENTICADO");
                                 }
-                            } else {
-                                System.out.println("Error: formato usuario/contraseña no válido.");
-                                out.writeUTF("FORMATO_INVALIDO");
-                            }
-                        }
-                        case "REG" -> {
-                            String userName = datos;
-
-                            String ruta = "usuarios.csv";
-                            List<String[]> usuarios = LectorCSV.leerDatos(ruta);
-
-                            boolean usuarioExiste = false;
-
-                            for (String[] fila : usuarios) {
-                                if (fila[0].trim().equals(userName)) {
-                                    usuarioExiste = true;
-                                    break;
-                                }
-                            }
-
-                            if (usuarioExiste) {
-                                out.writeUTF("USUARIO_YA_EXISTE");
-                            } else {
-                                String clave = GeneradorClave.generarClave(ruta);
-                                List<String[]> nuevoUsuario = new ArrayList<>();
-                                nuevoUsuario.add(new String[]{userName, clave});
-                                EscritorCSV.escribirDatos(ruta, nuevoUsuario, true);
-                                out.writeUTF("REG_OK|" + clave);
                             }
                         }
                     }
