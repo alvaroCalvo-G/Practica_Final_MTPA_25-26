@@ -6,18 +6,64 @@ import java.net.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class TCPServer {
 
-    public static void main(String args[]) {
-        try {
-            int cliente1 = 7896;
+    public static boolean aceptarClientes = true;
+    public static boolean mantenimiento = false;
 
-            ServerSocket listenSocket1 = new ServerSocket(cliente1);
+    public static void main(String args[]) {
+        Scanner sc = new Scanner(System.in);
+
+        try {
+            int puerto = 7896;
+            ServerSocket listenSocket = new ServerSocket(puerto);
+            System.out.println("[Servidor] Iniciando en el puerto " + puerto);
+
+            new Thread(() -> {
+                try {
+                    while (true) {
+                        Socket clientSocket = listenSocket.accept();
+                        if (aceptarClientes) {
+                            new Connection(clientSocket);
+                        } else {
+                            clientSocket.close();
+                            System.out.println("[Servidor] Conexion rechazada: servidor cerrado");
+                        }
+                    }
+                } catch (IOException e) {
+                    System.out.println("Listen socket: " + e.getMessage());
+                }
+            }).start();
 
             while (true) {
-                Socket clientSocket = listenSocket1.accept();
-                Connection c = new Connection(clientSocket);
+                String entrada = sc.nextLine();
+
+                switch (entrada) {
+                    case "stop" -> {
+                        aceptarClientes = false;
+                        System.out.println("[Servidor] Sin nuevos clientes");
+                    }
+                    case "start" -> {
+                        aceptarClientes = true;
+                        System.out.println("[Servidor] Aceptando clientes");
+                    }
+                    case "mant on" -> {
+                        mantenimiento = true;
+                        System.out.println("[Servidor] Entrando en modo mantenimiento");
+                    }
+                    case "mant of" -> {
+                        mantenimiento = false;
+                        System.out.println("[Servidor] Desactivando el modo de mantenimiento");
+                    }
+                    case "info" -> {
+                        System.out.println("[Servidor] Mostrando informacion...");
+                        GestorServidor.mostrarInfo();
+                    }
+                    default ->
+                        System.out.println("Posibles comando: stop | start | mant on | mant off | info");
+                }
             }
         } catch (IOException e) {
             System.out.println("Listen socket:" + e.getMessage());
@@ -39,6 +85,7 @@ class Connection extends Thread {
             in = new DataInputStream(clientSocket.getInputStream());
             out = new DataOutputStream(clientSocket.getOutputStream());
 
+            GestorServidor.agregarConexion(this);
             this.start();
         } catch (IOException e) {
             System.out.println("Connection:" + e.getMessage());
@@ -119,7 +166,7 @@ class Connection extends Thread {
                                     if (usuarioExiste) {
                                         out.writeUTF("USUARIO_YA_EXISTE");
                                     } else {
-                                        String clave = GeneradorClave.generarClave(ruta,userName);
+                                        String clave = GeneradorClave.generarClave(ruta, userName);
                                         List<String[]> nuevoUsuario = new ArrayList<>();
                                         nuevoUsuario.add(new String[]{userName, clave});
                                         EscritorCSV.escribirDatos(ruta, nuevoUsuario, true);
@@ -134,10 +181,45 @@ class Connection extends Thread {
                         case AUTENTIFICADO -> {
                             switch (comando) {
                                 case "LOGOUT" -> {
-                                    
+                                    out.writeUTF("LOGOUT_OK");
+                                    estado = Estados.CONECTADO;
                                 }
+                                case "LIST_DROOMS" -> {
 
+                                }
+                                case "JOIN" -> {
+
+                                }
+                                case "LEAVE" -> {
+
+                                }
+                                case "MSG" -> {
+                                    if (TCPServer.mantenimiento) {
+                                        out.writeUTF("SERVIDOR_MANTENIMIENTO");
+                                    } else {
+                                        // logica del mensaje
+                                    }
+                                }
+                                case "MD" -> {
+                                    if (TCPServer.mantenimiento) {
+                                        out.writeUTF("SERVIDOR_MANTENIMIENTO");
+                                    } else {
+                                        // logica del mensaje directo
+                                    }
+                                }
+                                case "HB" -> {
+
+                                }
+                                case "NOTIFY" -> {
+
+                                }
+                                case "REQ_HISTORY" -> {
+
+                                }
                             }
+                        }
+                        case DESCONECTADO -> {
+                            clientSocket.close();
                         }
                     }
                 } else {
@@ -150,6 +232,7 @@ class Connection extends Thread {
         } catch (IOException e) {
             System.out.println("readline:" + e.getMessage());
         } finally {
+            GestorServidor.eliminarConexion(this);
             try {
                 clientSocket.close();
             } catch (IOException e) {
