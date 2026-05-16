@@ -2,6 +2,8 @@ package Client;
 
 import Client.IU.InterfazGraficaInicio;
 import Client.IU.InterfazGraficaLogin;
+import Client.IU.InterfazGraficaPrincipal;
+import Client.IU.InterfazGraficaRegistro;
 import Client.Intefaces.Informacion;
 import java.net.*;
 import java.io.*;
@@ -16,7 +18,21 @@ public class TCPClient {
 
     private InterfazGraficaInicio IUInicio;
     private InterfazGraficaLogin IULog;
+    private InterfazGraficaRegistro IUReg;
+    private InterfazGraficaPrincipal IUMain;
 
+    public void setIULog(InterfazGraficaLogin IULog) {
+        this.IULog = IULog;
+    }
+
+    public void setIUReg(InterfazGraficaRegistro IUReg) {
+        this.IUReg = IUReg;
+    }
+
+    public void setIUMain(InterfazGraficaPrincipal IUMain) {
+        this.IUMain = IUMain;
+    }
+    
     private List<Informacion> generales = new ArrayList<>();
 
     public void addListener(Informacion listener) {
@@ -70,7 +86,7 @@ public class TCPClient {
         });
         hiloEscucha.start();
     }
-    
+
     public void mandarComando(Comando cadena) {
         if (out != null && in != null) {
             try {
@@ -84,7 +100,7 @@ public class TCPClient {
             notificarTodos("Error: No hay conexión con el servidor.");
         }
     }
-    
+
     public void cerrarConexion() {
         if (s != null) {
             try {
@@ -100,6 +116,9 @@ public class TCPClient {
             case "FORMATO_INVALIDO" -> {
                 notificarTodos("FORMATO_INVALIDO");
             }
+            case "NO_AUTENTICADO" -> {
+                notificarTodos("Es necesario registrarse o iniciar sesion");
+            }
             case "LOGIN_OK" -> {
                 if (IULog != null) {
                     IULog.statusLog("Acceso correcto");
@@ -113,12 +132,20 @@ public class TCPClient {
                     IULog.redInfoLabel();
                 }
             }
+            case "USUARIO_YA_EXISTE" -> {
+                IUReg.infoBannerChange("El nombre de usuario ya está en uso.");
+                IUReg.infoBannerRed();
+            }
 
             default -> {
-                System.out.println("Comando del servidor no reconocido: " + respuesta);
-                if (IULog != null) {
-                    IULog.statusLog("Respuesta: " + respuesta);
+                if (respuesta.startsWith("REG_OK")) {
+                    String clave = respuesta.split("\\|")[1];
+                    IUReg.infoBannerChange("Registro exitoso. Tu clave es: " + clave);
+                    IUReg.infoBannerGreen();
+                } else {
+                    notificarTodos("Respuesta: " + respuesta);
                 }
+
             }
         }
     }

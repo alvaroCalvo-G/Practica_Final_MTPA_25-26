@@ -80,18 +80,21 @@ public class InterfazGraficaInicio extends javax.swing.JFrame implements Informa
     }// </editor-fold>//GEN-END:initComponents
 
     private void LoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoginActionPerformed
+        clienteLogica.removeListener(this);
         InterfazGraficaLogin logIn = new InterfazGraficaLogin(clienteLogica);
 
         logIn.setVisible(true);
         
-        clienteLogica.removeListener(this);
         this.dispose();
     }//GEN-LAST:event_LoginActionPerformed
 
     private void RegistroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RegistroActionPerformed
-        if (clienteLogica != null) {
-            clienteLogica.mandarComando(REG);
-        }
+        clienteLogica.removeListener(this);
+        InterfazGraficaRegistro Reg = new InterfazGraficaRegistro(clienteLogica);
+
+        Reg.setVisible(true);
+        
+        this.dispose();
     }//GEN-LAST:event_RegistroActionPerformed
 
     public static void main(String args[]) {

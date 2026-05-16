@@ -9,13 +9,14 @@ public class InterfazGraficaLogin extends javax.swing.JFrame implements Informac
 
     private TCPClient clienteLogica;
     private Comando LOG = new Comando("LOGIN", "CLIENTE", "SERVIDOR", null);
-    
+
     private String datosU = null;
     private String datosC = null;
 
     public InterfazGraficaLogin(TCPClient clienteLogica) {
         this.clienteLogica = clienteLogica;
         initComponents();
+        clienteLogica.setIULog(this);
 
         clienteLogica.addListener(this);
 
@@ -140,6 +141,7 @@ public class InterfazGraficaLogin extends javax.swing.JFrame implements Informac
     }// </editor-fold>//GEN-END:initComponents
 
     private void homeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_homeActionPerformed
+        clienteLogica.removeListener(this);
         InterfazGraficaInicio home = new InterfazGraficaInicio(clienteLogica);
 
         home.setVisible(true);
@@ -185,9 +187,11 @@ public class InterfazGraficaLogin extends javax.swing.JFrame implements Informac
     }
 
     public void logOk() {
-//        InterfazGraficaPrincipal p = new InterfazGraficaPrincipal(clienteLogica);
-//
-//        p.setVisible(true);
+        clienteLogica.removeListener(this);
+        InterfazGraficaPrincipal p = new InterfazGraficaPrincipal(clienteLogica);
+
+        p.setVisible(true);
+        
         this.dispose();
     }
 
