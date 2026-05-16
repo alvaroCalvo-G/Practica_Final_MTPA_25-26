@@ -59,9 +59,10 @@ public class TCPServer {
                     }
                     case "info" -> {
                         System.out.println("[Servidor] Mostrando informacion...");
+                        GestorServidor.mostrarInfo();
                     }
                     default ->
-                        System.out.println("Posibles comando: stop | start | mant on | mant off");
+                        System.out.println("Posibles comando: stop | start | mant on | mant off | info");
                 }
             }
         } catch (IOException e) {
@@ -84,6 +85,7 @@ class Connection extends Thread {
             in = new DataInputStream(clientSocket.getInputStream());
             out = new DataOutputStream(clientSocket.getOutputStream());
 
+            GestorServidor.agregarConexion(this);
             this.start();
         } catch (IOException e) {
             System.out.println("Connection:" + e.getMessage());
@@ -192,10 +194,18 @@ class Connection extends Thread {
 
                                 }
                                 case "MSG" -> {
-                                    //Cuidado con datos
+                                    if (TCPServer.mantenimiento) {
+                                        out.writeUTF("SERVIDOR_MANTENIMIENTO");
+                                    } else {
+                                        // logica del mensaje
+                                    }
                                 }
                                 case "MD" -> {
-
+                                    if (TCPServer.mantenimiento) {
+                                        out.writeUTF("SERVIDOR_MANTENIMIENTO");
+                                    } else {
+                                        // logica del mensaje directo
+                                    }
                                 }
                                 case "HB" -> {
 
@@ -222,6 +232,7 @@ class Connection extends Thread {
         } catch (IOException e) {
             System.out.println("readline:" + e.getMessage());
         } finally {
+            GestorServidor.eliminarConexion(this);
             try {
                 clientSocket.close();
             } catch (IOException e) {
