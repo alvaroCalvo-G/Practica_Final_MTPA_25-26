@@ -5,25 +5,31 @@ import java.util.List;
 
 public class GeneradorClave {
 
-    public static String generarClave(String rutaArchivo) {
+    public static String generarClave(String rutaArchivo, String userName) {
+        int dia = java.time.LocalDate.now().getDayOfMonth();
+        int clave = dia + 1 + userName.length();
+
         List<String[]> usuarios = LectorCSV.leerDatos(rutaArchivo);
 
-        int maxId = 0;
-
-        for (String[] fila : usuarios) {
-            if (fila.length < 2) {
-                continue;
-            }
-            try {
-                int id = Integer.parseInt(fila[1].trim());
-                if (id > maxId) {
-                    maxId = id;
+        boolean repetida = true;
+        while (repetida) {
+            repetida = false;
+            for (String[] fila : usuarios) {
+                if (fila.length < 2) {
+                    continue;
                 }
-            } catch (NumberFormatException e) {
-                
+                try {
+                    int claveExistente = Integer.parseInt(fila[1].trim());
+                    if (claveExistente == clave) {
+                        clave++;
+                        repetida = true;
+                        break;
+                    }
+                } catch (NumberFormatException e) {
+                }
             }
         }
 
-        return String.valueOf(maxId + 1);
+        return String.valueOf(clave);
     }
 }

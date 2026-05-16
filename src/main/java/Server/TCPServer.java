@@ -119,7 +119,7 @@ class Connection extends Thread {
                                     if (usuarioExiste) {
                                         out.writeUTF("USUARIO_YA_EXISTE");
                                     } else {
-                                        String clave = GeneradorClave.generarClave(ruta);
+                                        String clave = GeneradorClave.generarClave(ruta,userName);
                                         List<String[]> nuevoUsuario = new ArrayList<>();
                                         nuevoUsuario.add(new String[]{userName, clave});
                                         EscritorCSV.escribirDatos(ruta, nuevoUsuario, true);
