@@ -41,7 +41,6 @@ class Connection extends Thread {
     public void run() {
         try {
             while (true) {
-                //Inyecion de dependencias
                 String instrucciones = in.readUTF();
                 System.out.println("Recibido: " + instrucciones);
 
