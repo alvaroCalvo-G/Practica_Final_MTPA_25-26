@@ -70,10 +70,33 @@ public class TCPClient {
         });
         hiloEscucha.start();
     }
+    
+    public void mandarComando(Comando cadena) {
+        if (out != null && in != null) {
+            try {
+                out.writeUTF(cadena.toString());
+            } catch (EOFException e) {
+                notificarTodos("EOF:" + e.getMessage());
+            } catch (IOException e) {
+                notificarTodos("readline:" + e.getMessage());
+            }
+        } else {
+            notificarTodos("Error: No hay conexión con el servidor.");
+        }
+    }
+    
+    public void cerrarConexion() {
+        if (s != null) {
+            try {
+                s.close();
+            } catch (IOException e) {
+                notificarTodos("close:" + e.getMessage());
+            }
+        }
+    }
 
     private void procesarRespuesta(String respuesta) {
-        System.out.println("Mensaje del servidor: " + respuesta);
-
+//        System.out.println("Mensaje del servidor: " + respuesta);
         switch (respuesta) {
             case "LOGIN_OK":
                 if (IULog != null) {
@@ -95,30 +118,6 @@ public class TCPClient {
                     IULog.statusLog("Respuesta: " + respuesta);
                 }
                 break;
-        }
-    }
-
-    public void mandarComando(Comando cadena) {
-        if (out != null && in != null) {
-            try {
-                out.writeUTF(cadena.toString());
-            } catch (EOFException e) {
-                notificarTodos("EOF:" + e.getMessage());
-            } catch (IOException e) {
-                notificarTodos("readline:" + e.getMessage());
-            }
-        } else {
-            notificarTodos("Error: No hay conexión con el servidor.");
-        }
-    }
-
-    public void cerrarConexion() {
-        if (s != null) {
-            try {
-                s.close();
-            } catch (IOException e) {
-                notificarTodos("close:" + e.getMessage());
-            }
         }
     }
 
