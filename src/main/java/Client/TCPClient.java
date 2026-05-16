@@ -96,28 +96,27 @@ public class TCPClient {
     }
 
     private void procesarRespuesta(String respuesta) {
-//        System.out.println("Mensaje del servidor: " + respuesta);
         switch (respuesta) {
-            case "LOGIN_OK":
+            case "LOGIN_OK" -> {
                 if (IULog != null) {
                     IULog.statusLog("Acceso correcto");
                     IULog.greenInfoLabel();
                     IULog.logOk();
                 }
-                break;
-            case "LOGIN_INCORRECTO":
+            }
+            case "LOGIN_INCORRECTO" -> {
                 if (IULog != null) {
                     IULog.statusLog("Login incorrecto");
                     IULog.redInfoLabel();
                 }
-                break;
+            }
 
-            default:
+            default -> {
                 System.out.println("Comando del servidor no reconocido: " + respuesta);
                 if (IULog != null) {
                     IULog.statusLog("Respuesta: " + respuesta);
                 }
-                break;
+            }
         }
     }
 
