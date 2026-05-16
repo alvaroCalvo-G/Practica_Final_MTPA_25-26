@@ -146,13 +146,14 @@ public class TCPClient {
                 IUReg.infoBannerChange("El nombre de usuario ya está en uso.");
                 IUReg.infoBannerRed();
             }
-     
             default -> {
                 if (respuesta.startsWith("REG_OK")) {
                     String clave = respuesta.split("\\|")[1];
                     IUReg.infoBannerChange("Registro exitoso. Tu clave es: " + clave);
                     IUReg.infoBannerGreen();
-                } else {
+                }if(respuesta.startsWith("LIST_ROOMS_OK")){
+                    
+                }else {
                     notificarTodos("Respuesta: " + respuesta);
                 }
 

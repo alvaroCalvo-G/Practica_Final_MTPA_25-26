@@ -2,6 +2,7 @@ package Server;
 
 import Client.EscritorCSV;
 import Client.LectorCSV;
+import Client.LectorCSVColumna;
 import java.net.*;
 import java.io.*;
 import java.util.ArrayList;
@@ -185,7 +186,10 @@ class Connection extends Thread {
                                     estado = Estados.CONECTADO;
                                 }
                                 case "LIST_DROOMS" -> {
-
+                                    String[] salones = LectorCSVColumna.leerColumna("salones.csv", 0);
+                                    String rooms;
+                                    rooms = String.join("/", salones);
+                                    out.writeUTF("LIST_ROOMS_OK|" + datos);
                                 }
                                 case "JOIN" -> {
 
