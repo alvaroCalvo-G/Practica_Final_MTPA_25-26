@@ -1,4 +1,3 @@
-
 package Client.IU;
 
 import Client.Comando;
@@ -6,18 +5,26 @@ import Client.Intefaces.Informacion;
 import Client.TCPClient;
 import javax.swing.JOptionPane;
 
-public class InterfazGraficaLogin extends javax.swing.JFrame implements Informacion{
+public class InterfazGraficaLogin extends javax.swing.JFrame implements Informacion {
 
     private TCPClient clienteLogica;
-    private Comando LOG = new Comando(null, null, null, null);
+    private Comando LOG = new Comando("LOGIN", "CLIENTE", "SERVIDOR", null);
     private String datosU = null;
     private String datosC = null;
-    
-    public InterfazGraficaLogin(TCPClient clienteLogica){
+
+    public InterfazGraficaLogin(TCPClient clienteLogica) {
         this.clienteLogica = clienteLogica;
         initComponents();
+
+        clienteLogica.addListener(this);
+
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                clienteLogica.removeListener(InterfazGraficaLogin.this);
+            }
+        });
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -133,64 +140,61 @@ public class InterfazGraficaLogin extends javax.swing.JFrame implements Informac
 
     private void homeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_homeActionPerformed
         InterfazGraficaInicio home = new InterfazGraficaInicio(clienteLogica);
-        
+
         home.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_homeActionPerformed
 
     private void usuarioTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usuarioTextActionPerformed
         String nombreUsuario = usuarioText.getText();
-        
-        if(!nombreUsuario.isEmpty()){
-            datosU=nombreUsuario;
+
+        if (!nombreUsuario.isEmpty()) {
+            datosU = nombreUsuario;
         }
     }//GEN-LAST:event_usuarioTextActionPerformed
 
     private void ConfirmacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ConfirmacionActionPerformed
-        LOG.setComando("LOGIN");
-        LOG.setOrigen("Cliente");
-        LOG.setDestino("Server");
         LOG.setDatos(datos());
-        
+
         clienteLogica.mandarComando(LOG);
     }//GEN-LAST:event_ConfirmacionActionPerformed
 
     private void PasswordTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PasswordTextActionPerformed
         String passwordUsuario = PasswordText.getText();
-        
-        if(!passwordUsuario.isEmpty()){
-            datosC=passwordUsuario;
+
+        if (!passwordUsuario.isEmpty()) {
+            datosC = passwordUsuario;
         }
     }//GEN-LAST:event_PasswordTextActionPerformed
 
-    private String datos(){
+    private String datos() {
         return datosU + "/" + datosC;
     }
-    
+
     public void statusLog(String mensaje) {
         infoName.setText(mensaje);
         System.out.println(mensaje);
     }
-    
-    public void redInfoLabel(){
+
+    public void redInfoLabel() {
         infoName.setForeground(new java.awt.Color(255, 0, 0));
     }
-    
-    public void greenInfoLabel(){
+
+    public void greenInfoLabel() {
         infoName.setForeground(new java.awt.Color(0, 255, 0));
     }
-    
-    public void logOk(){
+
+    public void logOk() {
 //        InterfazGraficaPrincipal p = new InterfazGraficaPrincipal(clienteLogica);
 //
 //        p.setVisible(true);
 //        this.dispose();
     }
-    
+
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                TCPClient cliente = new TCPClient(); 
+                TCPClient cliente = new TCPClient();
                 new InterfazGraficaLogin(cliente).setVisible(true);
             }
         });

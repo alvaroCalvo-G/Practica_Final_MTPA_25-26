@@ -126,10 +126,6 @@ public class TCPClient {
         TCPClient cliente = new TCPClient();
 
         InterfazGraficaInicio iu = new InterfazGraficaInicio(cliente);
-        InterfazGraficaLogin log = new InterfazGraficaLogin(cliente);
-
-        cliente.addListener(iu);
-        cliente.addListener(log);
 
         iu.setVisible(true);
 

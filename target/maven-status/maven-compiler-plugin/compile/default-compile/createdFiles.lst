@@ -10,8 +10,10 @@ Client\Comando.class
 Client\IU\InterfazGraficaLogin$4.class
 Client\IU\InterfazGraficaLogin.class
 Client\IU\InterfazGraficaLogin$3.class
+Client\IU\InterfazGraficaInicio$4.class
 Client\LectorCSV.class
 Client\TCPClient$1.class
+Client\IU\InterfazGraficaLogin$6.class
 Client\Intefaces\Informacion.class
 Client\IU\InterfazGraficaInicio$1.class
 Client\IU\InterfazGraficaLogin$2.class

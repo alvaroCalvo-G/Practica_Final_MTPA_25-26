@@ -5,7 +5,7 @@ import Client.Intefaces.Informacion;
 import Client.TCPClient;
 import javax.swing.JOptionPane;
 
-public class InterfazGraficaInicio extends javax.swing.JFrame implements Informacion{
+public class InterfazGraficaInicio extends javax.swing.JFrame implements Informacion {
 
     private TCPClient clienteLogica;
     private Comando REG = new Comando("REG", "origen", "destino", "datos");
@@ -13,9 +13,17 @@ public class InterfazGraficaInicio extends javax.swing.JFrame implements Informa
     public InterfazGraficaInicio(TCPClient clienteLogica) {
         this.clienteLogica = clienteLogica;
         initComponents();
+
+        clienteLogica.addListener(this);
+        
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                clienteLogica.removeListener(InterfazGraficaInicio.this);
+            }
+        });
     }
 
-    @SuppressWarnings("unchecked")
+@SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -75,6 +83,8 @@ public class InterfazGraficaInicio extends javax.swing.JFrame implements Informa
         InterfazGraficaLogin logIn = new InterfazGraficaLogin(clienteLogica);
 
         logIn.setVisible(true);
+        
+        clienteLogica.removeListener(this);
         this.dispose();
     }//GEN-LAST:event_LoginActionPerformed
 
@@ -100,7 +110,7 @@ public class InterfazGraficaInicio extends javax.swing.JFrame implements Informa
     // End of variables declaration//GEN-END:variables
 
     @Override
-    public void ventanaEmergente(String mensaje) {
+public void ventanaEmergente(String mensaje) {
         JOptionPane.showMessageDialog(this, mensaje);
     }
     
