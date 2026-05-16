@@ -97,6 +97,9 @@ public class TCPClient {
 
     private void procesarRespuesta(String respuesta) {
         switch (respuesta) {
+            case "FORMATO_INVALIDO" -> {
+                notificarTodos("FORMATO_INVALIDO");
+            }
             case "LOGIN_OK" -> {
                 if (IULog != null) {
                     IULog.statusLog("Acceso correcto");

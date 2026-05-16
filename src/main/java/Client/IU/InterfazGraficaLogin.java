@@ -9,6 +9,7 @@ public class InterfazGraficaLogin extends javax.swing.JFrame implements Informac
 
     private TCPClient clienteLogica;
     private Comando LOG = new Comando("LOGIN", "CLIENTE", "SERVIDOR", null);
+    
     private String datosU = null;
     private String datosC = null;
 
@@ -173,7 +174,6 @@ public class InterfazGraficaLogin extends javax.swing.JFrame implements Informac
 
     public void statusLog(String mensaje) {
         infoName.setText(mensaje);
-        System.out.println(mensaje);
     }
 
     public void redInfoLabel() {
@@ -188,7 +188,7 @@ public class InterfazGraficaLogin extends javax.swing.JFrame implements Informac
 //        InterfazGraficaPrincipal p = new InterfazGraficaPrincipal(clienteLogica);
 //
 //        p.setVisible(true);
-//        this.dispose();
+        this.dispose();
     }
 
     public static void main(String args[]) {

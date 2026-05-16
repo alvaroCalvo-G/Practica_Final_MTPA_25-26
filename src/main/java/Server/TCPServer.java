@@ -10,9 +10,11 @@ public class TCPServer {
     public static void main(String args[]) {
         try {
             int cliente1 = 7896;
-            ServerSocket listenSocket = new ServerSocket(cliente1);
+
+            ServerSocket listenSocket1 = new ServerSocket(cliente1);
+
             while (true) {
-                Socket clientSocket = listenSocket.accept();
+                Socket clientSocket = listenSocket1.accept();
                 Connection c = new Connection(clientSocket);
             }
         } catch (IOException e) {
@@ -30,15 +32,17 @@ class Connection extends Thread {
     public Connection(Socket aClientSocket) {
         try {
             clientSocket = aClientSocket;
+
             in = new DataInputStream(clientSocket.getInputStream());
             out = new DataOutputStream(clientSocket.getOutputStream());
+
             this.start();
         } catch (IOException e) {
             System.out.println("Connection:" + e.getMessage());
         }
-    }
-
-    public void run() {
+    } 
+    
+        public void run() {
         try {
             while (true) {
                 String instrucciones = in.readUTF();
@@ -52,47 +56,46 @@ class Connection extends Thread {
                     String destino = data[2];
                     String datos = data[3];
 
-                    if (comando.equals("LOGIN")) {
+                    switch (comando) {
+                        case "LOGIN" -> {
+                            String[] UandP = datos.split("/");
 
-                        String[] UandP = datos.split("/");
+                            if (UandP.length == 2) {
+                                String usuario = UandP[0];
+                                String password = UandP[1];
 
-                        if (UandP.length == 2) {
-                            String usuario = UandP[0];
-                            String password = UandP[1];
+                                String ruta = "usuarios.csv";
+                                List<String[]> listaDeDatos = LectorCSV.leerDatos(ruta);
 
-                            System.out.println("Usuario: " + usuario);
-                            System.out.println("Password: " + password);
+                                boolean loginExitoso = false;
 
-                            String ruta = "usuarios.csv";
-                            List<String[]> listaDeDatos = LectorCSV.leerDatos(ruta);
+                                for (String[] fila : listaDeDatos) {
+                                    String userCSV = fila[0].trim();
+                                    String passCSV = fila[1].trim();
 
-                            boolean loginExitoso = false;
-
-                            for (String[] fila : listaDeDatos) {
-                                String userCSV = fila[0].trim();
-                                String passCSV = fila[1].trim();
-
-                                if (userCSV.equals(usuario) && passCSV.equals(password)) {
-                                    loginExitoso = true;
-                                    break;
+                                    if (userCSV.equals(usuario) && passCSV.equals(password)) {
+                                        loginExitoso = true;
+                                        break;
+                                    }
                                 }
-                            }
 
-                            if (loginExitoso) {
-                                System.out.println("Login correcto para: " + usuario);
-                                out.writeUTF("LOGIN_OK");
+                                if (loginExitoso) {
+                                    System.out.println("Login correcto para: " + usuario);
+                                    out.writeUTF("LOGIN_OK");
+                                } else {
+                                    System.out.println("Login fallido para: " + usuario);
+                                    out.writeUTF("LOGIN_INCORRECTO");
+                                }
                             } else {
-                                System.out.println("Login fallido para: " + usuario);
-                                out.writeUTF("LOGIN_INCORRECTO");
+                                System.out.println("Error: formato usuario/contraseña no válido.");
+                                out.writeUTF("FORMATO_INVALIDO");
                             }
-                        } else {
-                            System.out.println("Error: El formato de usuario/contraseña no es válido.");
                         }
                     }
                 } else {
-                    System.out.println("Error: La trama recibida está incompleta.");
+                    System.out.println("Error: La información recibida está incompleta.");
                 }
-            }
+            }  
         } catch (EOFException e) {
             System.out.println("EOF:" + e.getMessage());
         } catch (IOException e) {
@@ -103,5 +106,7 @@ class Connection extends Thread {
             } catch (IOException e) {
             }
         }
-    }
+    } 
 }
+
+
