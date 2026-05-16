@@ -8,6 +8,7 @@ import javax.swing.JOptionPane;
 public class InterfazGraficaPrincipal extends javax.swing.JFrame implements Informacion {
 
     private TCPClient clienteLogica;
+    private Comando MostrarRooms = new Comando("LIST_DROOMS", null, null, null);
 
     public InterfazGraficaPrincipal(TCPClient clienteLogica) {
         this.clienteLogica = clienteLogica;
@@ -22,6 +23,8 @@ public class InterfazGraficaPrincipal extends javax.swing.JFrame implements Info
             }
         });
 
+        bienvenidoTextoUser(clienteLogica.getNombreUsuario());
+
         jScrollPane1.setVisible(false);
     }
 
@@ -32,6 +35,7 @@ public class InterfazGraficaPrincipal extends javax.swing.JFrame implements Info
         jScrollPane1 = new javax.swing.JScrollPane();
         Lista = new javax.swing.JList<>();
         botonLista = new javax.swing.JButton();
+        BienvenidoBanner = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -49,6 +53,10 @@ public class InterfazGraficaPrincipal extends javax.swing.JFrame implements Info
             }
         });
 
+        BienvenidoBanner.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        BienvenidoBanner.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        BienvenidoBanner.setText("Bienvenido");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -58,13 +66,17 @@ public class InterfazGraficaPrincipal extends javax.swing.JFrame implements Info
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(botonLista, javax.swing.GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE)
                     .addComponent(jScrollPane1))
-                .addContainerGap(725, Short.MAX_VALUE))
+                .addGap(48, 48, 48)
+                .addComponent(BienvenidoBanner, javax.swing.GroupLayout.PREFERRED_SIZE, 623, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(54, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(19, 19, 19)
-                .addComponent(botonLista, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(BienvenidoBanner, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE)
+                    .addComponent(botonLista, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 486, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(63, Short.MAX_VALUE))
@@ -88,12 +100,17 @@ public class InterfazGraficaPrincipal extends javax.swing.JFrame implements Info
         });
     }
 
+    public void bienvenidoTextoUser(String nombre) {
+        BienvenidoBanner.setText("Bienvenido " + nombre);
+    }
+
     @Override
     public void ventanaEmergente(String mensaje) {
         JOptionPane.showMessageDialog(this, mensaje);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel BienvenidoBanner;
     private javax.swing.JList<String> Lista;
     private javax.swing.JButton botonLista;
     private javax.swing.JScrollPane jScrollPane1;

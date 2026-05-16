@@ -15,6 +15,16 @@ public class TCPClient {
     private Socket s = null;
     private DataInputStream in = null;
     private DataOutputStream out = null;
+    
+    String nombreUsuario = null;
+    
+    public String getNombreUsuario() {
+        return nombreUsuario;
+    }
+
+    public void setNombreUsuario(String nombre) {
+        this.nombreUsuario = nombre;
+    }
 
     private InterfazGraficaInicio IUInicio;
     private InterfazGraficaLogin IULog;
@@ -59,7 +69,7 @@ public class TCPClient {
             s = new Socket("localhost", serverPort);
             in = new DataInputStream(s.getInputStream());
             out = new DataOutputStream(s.getOutputStream());
-
+            
             iniciarEscucha();
 
         } catch (UnknownHostException e) {
