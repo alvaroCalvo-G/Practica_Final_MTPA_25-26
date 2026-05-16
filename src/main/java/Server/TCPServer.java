@@ -72,6 +72,10 @@ class Connection extends Thread {
                                 boolean loginExitoso = false;
 
                                 for (String[] fila : listaDeDatos) {
+                                    if (fila.length < 2) {
+                                        continue;
+                                    }
+
                                     String userCSV = fila[0].trim();
                                     String passCSV = fila[1].trim();
 
