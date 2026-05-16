@@ -125,14 +125,14 @@ public class InterfazGraficaRegistro extends javax.swing.JFrame implements Infor
     }//GEN-LAST:event_UserNameActionPerformed
 
     private void homeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_homeActionPerformed
+        clienteLogica.removeListener(this);
         InterfazGraficaInicio home = new InterfazGraficaInicio(clienteLogica);
-
         home.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_homeActionPerformed
 
     private void confirmacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirmacionActionPerformed
-        REG.setComando(datos);
+        REG.setDatos(datos);
         
         clienteLogica.mandarComando(REG);
     }//GEN-LAST:event_confirmacionActionPerformed
