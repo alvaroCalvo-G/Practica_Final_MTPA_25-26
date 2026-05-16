@@ -1,20 +1,36 @@
 package Client;
 
+import Client.IU.InterfazGraficaInicio;
+import Client.IU.InterfazGraficaLogin;
+import Client.Intefaces.Informacion;
 import java.net.*;
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TCPClient {
 
     private Socket s = null;
     private DataInputStream in = null;
     private DataOutputStream out = null;
-    private InterfazGraficaInicio vista;
+
+    private InterfazGraficaInicio IUInicio;
     private InterfazGraficaLogin IULog;
 
-    private String estado = null;
+    private List<Informacion> generales = new ArrayList<>();
 
-    public void setVista(InterfazGraficaInicio vista) {
-        this.vista = vista;
+    public void addListener(Informacion listener) {
+        generales.add(listener);
+    }
+
+    public void removeListener(Informacion listener) {
+        generales.remove(listener);
+    }
+
+    private void notificarTodos(String mensaje) {
+        for (Informacion I : generales) {
+            I.ventanaEmergente(mensaje);
+        }
     }
 
     public TCPClient() {
@@ -23,26 +39,17 @@ public class TCPClient {
     public void conectar() {
         try {
             int serverPort = 7896;
+
             s = new Socket("localhost", serverPort);
             in = new DataInputStream(s.getInputStream());
             out = new DataOutputStream(s.getOutputStream());
-            if (vista != null) {
-                vista.infoConnect("Conectado");
-            }
-            if (IULog != null) {
-                IULog.infoConnect("Conectado");
-            }
 
             iniciarEscucha();
 
         } catch (UnknownHostException e) {
-            if (vista != null) {
-                vista.info("Socket:" + e.getMessage());
-            }
+            notificarTodos("Socket:" + e.getMessage());
         } catch (IOException e) {
-            if (vista != null) {
-                vista.info("IO:" + e.getMessage());
-            }
+            notificarTodos("IO:" + e.getMessage());
         }
     }
 
@@ -57,77 +64,60 @@ public class TCPClient {
                         procesarRespuesta(respuesta);
                     }
                 } catch (IOException e) {
-                    if (vista != null) {
-                        vista.info("Conexión con el servidor terminada.");
-                    }
+                    notificarTodos("Conexión con el servidor terminada.");
                 }
             }
         });
         hiloEscucha.start();
     }
-
-    public void setIULog(InterfazGraficaLogin IULog) {
-        this.IULog = IULog;
-    }
-
-    private void procesarRespuesta(String respuesta) {
-        System.out.println("Mensaje del servidor: " + respuesta);
-
-        switch (respuesta) {
-            case "LOGIN_OK":
-                if (IULog != null) {
-                    IULog.statusLog("Acceso correcto");
-                    IULog.greenInfoLabel();
-                    IULog.logOk();
-                }
-                break;
-            case "LOGIN_INCORRECTO":
-                if (IULog != null) {
-                    IULog.statusLog("Login incorrecto");
-                    IULog.redInfoLabel();
-                }
-                break;
-
-            default:
-                System.out.println("Comando del servidor no reconocido: " + respuesta);
-                if (IULog != null) {
-                    IULog.statusLog("Respuesta: " + respuesta);
-                }
-                break;
-        }
-    }
-
-    public void estadoCliente() throws IOException {
-        out.writeUTF(estado);
-    }
-
+    
     public void mandarComando(Comando cadena) {
         if (out != null && in != null) {
             try {
                 out.writeUTF(cadena.toString());
             } catch (EOFException e) {
-                if (vista != null) {
-                    vista.info("EOF:" + e.getMessage());
-                }
+                notificarTodos("EOF:" + e.getMessage());
             } catch (IOException e) {
-                if (vista != null) {
-                    vista.info("readline:" + e.getMessage());
-                }
+                notificarTodos("readline:" + e.getMessage());
             }
         } else {
-            if (vista != null) {
-                vista.info("Error: No hay conexión con el servidor.");
-            }
+            notificarTodos("Error: No hay conexión con el servidor.");
         }
     }
-
+    
     public void cerrarConexion() {
         if (s != null) {
             try {
                 s.close();
             } catch (IOException e) {
-                if (vista != null) {
-                    vista.info("close:" + e.getMessage());
+                notificarTodos("close:" + e.getMessage());
+            }
+        }
+    }
+
+    private void procesarRespuesta(String respuesta) {
+        switch (respuesta) {
+            case "FORMATO_INVALIDO" -> {
+                notificarTodos("FORMATO_INVALIDO");
+            }
+            case "LOGIN_OK" -> {
+                if (IULog != null) {
+                    IULog.statusLog("Acceso correcto");
+                    IULog.greenInfoLabel();
+                    IULog.logOk();
+                }
+            }
+            case "LOGIN_INCORRECTO" -> {
+                if (IULog != null) {
+                    IULog.statusLog("Login incorrecto");
+                    IULog.redInfoLabel();
+                }
+            }
+
+            default -> {
+                System.out.println("Comando del servidor no reconocido: " + respuesta);
+                if (IULog != null) {
+                    IULog.statusLog("Respuesta: " + respuesta);
                 }
             }
         }
@@ -135,9 +125,9 @@ public class TCPClient {
 
     public static void main(String args[]) throws IOException {
         TCPClient cliente = new TCPClient();
+
         InterfazGraficaInicio iu = new InterfazGraficaInicio(cliente);
 
-        cliente.setVista(iu);
         iu.setVisible(true);
 
         cliente.conectar();
