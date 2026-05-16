@@ -8,9 +8,10 @@ import javax.swing.JOptionPane;
 public class InterfazGraficaPrincipal extends javax.swing.JFrame implements Informacion {
 
     private TCPClient clienteLogica;
-    private Comando MostrarRooms = new Comando("LIST_DROOMS", null, null, null);
+    private Comando MostrarRooms = new Comando("LIST_DROOMS", null, "Server", null);
 
     public InterfazGraficaPrincipal(TCPClient clienteLogica) {
+        MostrarRooms.setOrigen(clienteLogica.getNombreUsuario());
         this.clienteLogica = clienteLogica;
         initComponents();
         clienteLogica.setIUMain(this);
@@ -89,6 +90,11 @@ public class InterfazGraficaPrincipal extends javax.swing.JFrame implements Info
         boolean visible = jScrollPane1.isVisible();
         jScrollPane1.setVisible(!visible);
         botonLista.setText(visible ? "Mostrar lista" : "Ocultar lista");
+        
+        if (!visible) {
+            clienteLogica.mandarComando(MostrarRooms);
+        }
+
     }//GEN-LAST:event_botonListaActionPerformed
 
     public static void main(String args[]) {
