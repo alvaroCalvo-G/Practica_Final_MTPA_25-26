@@ -39,11 +39,29 @@ public class TCPServer {
 
             while (true) {
                 String entrada = sc.nextLine();
-                
+
                 switch (entrada) {
                     case "stop" -> {
+                        aceptarClientes = false;
+                        System.out.println("[Servidor] Sin nuevos clientes");
                     }
-                    default -> System.out.println("Posibles comando: stop | start | mant on | mant off");
+                    case "start" -> {
+                        aceptarClientes = true;
+                        System.out.println("[Servidor] Aceptando clientes");
+                    }
+                    case "mant on" -> {
+                        mantenimiento = true;
+                        System.out.println("[Servidor] Entrando en modo mantenimiento");
+                    }
+                    case "mant of" -> {
+                        mantenimiento = false;
+                        System.out.println("[Servidor] Desactivando el modo de mantenimiento");
+                    }
+                    case "info" -> {
+                        System.out.println("[Servidor] Mostrando informacion...");
+                    }
+                    default ->
+                        System.out.println("Posibles comando: stop | start | mant on | mant off");
                 }
             }
         } catch (IOException e) {
