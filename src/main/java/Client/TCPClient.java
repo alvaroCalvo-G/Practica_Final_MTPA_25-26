@@ -2,6 +2,7 @@ package Client;
 
 import Client.IU.InterfazGraficaInicio;
 import Client.IU.InterfazGraficaLogin;
+import Client.IU.InterfazGraficaPrincipal;
 import Client.IU.InterfazGraficaRegistro;
 import Client.Intefaces.Informacion;
 import java.net.*;
@@ -18,6 +19,7 @@ public class TCPClient {
     private InterfazGraficaInicio IUInicio;
     private InterfazGraficaLogin IULog;
     private InterfazGraficaRegistro IUReg;
+    private InterfazGraficaPrincipal IUMain;
 
     public void setIULog(InterfazGraficaLogin IULog) {
         this.IULog = IULog;
@@ -27,6 +29,10 @@ public class TCPClient {
         this.IUReg = IUReg;
     }
 
+    public void setIUMain(InterfazGraficaPrincipal IUMain) {
+        this.IUMain = IUMain;
+    }
+    
     private List<Informacion> generales = new ArrayList<>();
 
     public void addListener(Informacion listener) {

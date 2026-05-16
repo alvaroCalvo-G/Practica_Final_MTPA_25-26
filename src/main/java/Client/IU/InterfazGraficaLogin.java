@@ -188,9 +188,10 @@ public class InterfazGraficaLogin extends javax.swing.JFrame implements Informac
 
     public void logOk() {
         clienteLogica.removeListener(this);
-//        InterfazGraficaPrincipal p = new InterfazGraficaPrincipal(clienteLogica);
-//
-//        p.setVisible(true);
+        InterfazGraficaPrincipal p = new InterfazGraficaPrincipal(clienteLogica);
+
+        p.setVisible(true);
+        
         this.dispose();
     }
 
