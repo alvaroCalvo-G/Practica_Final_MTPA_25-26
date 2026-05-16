@@ -116,6 +116,9 @@ public class TCPClient {
             case "FORMATO_INVALIDO" -> {
                 notificarTodos("FORMATO_INVALIDO");
             }
+            case "NO_AUTENTICADO" -> {
+                notificarTodos("Es necesario registrarse o iniciar sesion");
+            }
             case "LOGIN_OK" -> {
                 if (IULog != null) {
                     IULog.statusLog("Acceso correcto");

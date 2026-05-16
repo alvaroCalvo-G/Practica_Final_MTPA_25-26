@@ -91,6 +91,7 @@ class Connection extends Thread {
                                         if (loginExitoso) {
                                             System.out.println("Login correcto para: " + usuario);
                                             out.writeUTF("LOGIN_OK");
+                                            estado = estado.AUTENTIFICADO;
                                         } else {
                                             System.out.println("Login fallido para: " + usuario);
                                             out.writeUTF("LOGIN_INCORRECTO");
@@ -128,6 +129,14 @@ class Connection extends Thread {
                                 default -> {
                                     out.writeUTF("NO_AUTENTICADO");
                                 }
+                            }
+                        }
+                        case AUTENTIFICADO -> {
+                            switch (comando) {
+                                case "LOGOUT" -> {
+                                    
+                                }
+
                             }
                         }
                     }
