@@ -125,10 +125,18 @@ public class TCPClient {
             }
             case "USUARIO_YA_EXISTE" -> {
                 IUReg.infoBannerChange("El nombre de usuario ya está en uso.");
+                IUReg.infoBannerRed();
             }
 
             default -> {
-                notificarTodos("Respuesta: " + respuesta);
+                if (respuesta.startsWith("REG_OK")) {
+                    String clave = respuesta.split("\\|")[1];
+                    IUReg.infoBannerChange("Registro exitoso. Tu clave es: " + clave);
+                    IUReg.infoBannerGreen();
+                } else {
+                    notificarTodos("Respuesta: " + respuesta);
+                }
+
             }
         }
     }
