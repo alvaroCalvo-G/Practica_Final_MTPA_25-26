@@ -1,8 +1,10 @@
 package Server;
 
+import Client.EscritorCSV;
 import Client.LectorCSV;
 import java.net.*;
 import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class TCPServer {
@@ -40,9 +42,9 @@ class Connection extends Thread {
         } catch (IOException e) {
             System.out.println("Connection:" + e.getMessage());
         }
-    } 
-    
-        public void run() {
+    }
+
+    public void run() {
         try {
             while (true) {
                 String instrucciones = in.readUTF();
@@ -93,14 +95,34 @@ class Connection extends Thread {
                         }
                         case "REG" -> {
                             String userName = datos;
-                            
-                            
+
+                            String ruta = "usuarios.csv";
+                            List<String[]> usuarios = LectorCSV.leerDatos(ruta);
+
+                            boolean usuarioExiste = false;
+
+                            for (String[] fila : usuarios) {
+                                if (fila[0].trim().equals(userName)) {
+                                    usuarioExiste = true;
+                                    break;
+                                }
+                            }
+
+                            if (usuarioExiste) {
+                                out.writeUTF("USUARIO_YA_EXISTE");
+                            } else {
+                                String clave = GeneradorClave.generarClave(ruta);
+                                List<String[]> nuevoUsuario = new ArrayList<>();
+                                nuevoUsuario.add(new String[]{userName, clave});
+                                EscritorCSV.escribirDatos(ruta, nuevoUsuario, true);
+                                out.writeUTF("REG_OK|" + clave);
+                            }
                         }
                     }
                 } else {
                     System.out.println("Error: La información recibida está incompleta.");
                 }
-            }  
+            }
         } catch (EOFException e) {
             System.out.println("EOF:" + e.getMessage());
         } catch (IOException e) {
@@ -111,7 +133,5 @@ class Connection extends Thread {
             } catch (IOException e) {
             }
         }
-    } 
+    }
 }
-
-
