@@ -121,6 +121,7 @@ class Connection extends Thread {
                     }
                 } else {
                     System.out.println("Error: La información recibida está incompleta.");
+                    out.writeUTF("FORMATO_INVALIDO");
                 }
             }
         } catch (EOFException e) {

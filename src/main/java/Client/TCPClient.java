@@ -26,7 +26,7 @@ public class TCPClient {
     public void setIUReg(InterfazGraficaRegistro IUReg) {
         this.IUReg = IUReg;
     }
-    
+
     private List<Informacion> generales = new ArrayList<>();
 
     public void addListener(Informacion listener) {
@@ -123,12 +123,12 @@ public class TCPClient {
                     IULog.redInfoLabel();
                 }
             }
+            case "USUARIO_YA_EXISTE" -> {
+                IUReg.infoBannerChange("El nombre de usuario ya está en uso.");
+            }
 
             default -> {
-                System.out.println("Comando del servidor no reconocido: " + respuesta);
-                if (IULog != null) {
-                    IULog.statusLog("Respuesta: " + respuesta);
-                }
+                notificarTodos("Respuesta: " + respuesta);
             }
         }
     }

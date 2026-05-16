@@ -33,7 +33,7 @@ public class InterfazGraficaRegistro extends javax.swing.JFrame implements Infor
 
         BannerMain = new javax.swing.JLabel();
         UserName = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
+        userbanner = new javax.swing.JLabel();
         informationsBanner = new javax.swing.JLabel();
         home = new javax.swing.JButton();
         confirmacion = new javax.swing.JButton();
@@ -50,8 +50,8 @@ public class InterfazGraficaRegistro extends javax.swing.JFrame implements Infor
             }
         });
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel1.setText("Usuario:");
+        userbanner.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        userbanner.setText("Usuario:");
 
         informationsBanner.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         informationsBanner.setText("INFO...");
@@ -81,7 +81,7 @@ public class InterfazGraficaRegistro extends javax.swing.JFrame implements Infor
                         .addComponent(BannerMain, javax.swing.GroupLayout.PREFERRED_SIZE, 377, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(198, 198, 198)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(userbanner, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(26, 26, 26)
                         .addComponent(UserName, javax.swing.GroupLayout.PREFERRED_SIZE, 333, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
@@ -103,7 +103,7 @@ public class InterfazGraficaRegistro extends javax.swing.JFrame implements Infor
                 .addGap(40, 40, 40)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(UserName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(userbanner, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(informationsBanner, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(45, 45, 45)
@@ -137,6 +137,18 @@ public class InterfazGraficaRegistro extends javax.swing.JFrame implements Infor
         clienteLogica.mandarComando(REG);
     }//GEN-LAST:event_confirmacionActionPerformed
 
+    public void infoBannerChange(String mensaje){
+        informationsBanner.setText(mensaje);
+    }
+    
+    public void infoBannerRed(){
+        informationsBanner.setForeground(new java.awt.Color(255, 0, 0));
+    }
+    
+    public void infoBannerGreen(){
+        informationsBanner.setForeground(new java.awt.Color(0, 255, 0));
+    }
+    
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -152,7 +164,7 @@ public class InterfazGraficaRegistro extends javax.swing.JFrame implements Infor
     private javax.swing.JButton confirmacion;
     private javax.swing.JButton home;
     private javax.swing.JLabel informationsBanner;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel userbanner;
     // End of variables declaration//GEN-END:variables
 
     @Override
