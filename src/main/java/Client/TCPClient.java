@@ -4,11 +4,14 @@ import Client.IU.InterfazGraficaInicio;
 import Client.IU.InterfazGraficaLogin;
 import Client.IU.InterfazGraficaPrincipal;
 import Client.IU.InterfazGraficaRegistro;
+import Client.IU.InterfazGraficaSalon;
 import Client.Intefaces.Informacion;
 import java.net.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class TCPClient {
 
@@ -16,10 +19,21 @@ public class TCPClient {
     private DataInputStream in = null;
     private DataOutputStream out = null;
 
+    String nombreUsuario = null;
+
+    public String getNombreUsuario() {
+        return nombreUsuario;
+    }
+
+    public void setNombreUsuario(String nombre) {
+        this.nombreUsuario = nombre;
+    }
+
     private InterfazGraficaInicio IUInicio;
     private InterfazGraficaLogin IULog;
     private InterfazGraficaRegistro IUReg;
     private InterfazGraficaPrincipal IUMain;
+    private InterfazGraficaSalon IUSalon;
 
     public void setIULog(InterfazGraficaLogin IULog) {
         this.IULog = IULog;
@@ -32,7 +46,11 @@ public class TCPClient {
     public void setIUMain(InterfazGraficaPrincipal IUMain) {
         this.IUMain = IUMain;
     }
-    
+
+    public void setIUSalon(InterfazGraficaSalon IUSalon) {
+        this.IUSalon = IUSalon;
+    }
+
     private List<Informacion> generales = new ArrayList<>();
 
     public void addListener(Informacion listener) {
@@ -136,14 +154,45 @@ public class TCPClient {
                 IUReg.infoBannerChange("El nombre de usuario ya está en uso.");
                 IUReg.infoBannerRed();
             }
-     
+            case "MENSAJE_DEMASIADO_LARGO" -> {
+                notificarTodos("El mensaje supera los 190 caracteres.");
+            }
+            case "SERVIDOR_MANTENIMIENTO" -> {
+                notificarTodos("El servidor esta en mantenimiento.");
+            }
             default -> {
                 if (respuesta.startsWith("REG_OK")) {
                     String clave = respuesta.split("\\|")[1];
                     IUReg.infoBannerChange("Registro exitoso. Tu clave es: " + clave);
                     IUReg.infoBannerGreen();
+                } else if (respuesta.startsWith("LIST_ROOMS_OK")) {
+                    String[] partes = respuesta.split("\\|");
+                    String[] salones = partes[1].split("/");
+                    if (IUMain != null) {
+                        IUMain.actualizarSalones(salones);
+                    }
+                } else if (respuesta.startsWith("JOIN_OK")) {
+                    String[] partes = respuesta.split("\\|");
+                    if (IUMain != null && partes.length > 1) {
+                        IUMain.unirseASalon(partes[1]);
+                    }
+                } else if (respuesta.startsWith("LEAVE_OK")) {
+                    try {
+                        String[] partes = respuesta.split("\\|");
+                        if (IUMain != null && partes.length > 1) {
+                            IUMain.abandonarSalon(partes[1]);
+                        }
+                        out.writeUTF("NOTIFY");
+                    } catch (IOException ex) {
+                        Logger.getLogger(TCPClient.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                } else if (respuesta.startsWith("MSG_SENT")) {
+                    String[] partes = respuesta.split("\\|");
+                    if (partes.length >= 4 && IUSalon != null) {
+                        IUSalon.recibirMensaje(partes[2], partes[3]);
+                    }
                 } else {
-                    notificarTodos("Respuesta: " + respuesta);
+                    notificarTodos("FORMATO_INVALIDO: " + respuesta);
                 }
 
             }

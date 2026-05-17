@@ -2,6 +2,7 @@ package Server;
 
 import Client.EscritorCSV;
 import Client.LectorCSV;
+import Client.LectorCSVColumna;
 import java.net.*;
 import java.io.*;
 import java.util.ArrayList;
@@ -53,7 +54,7 @@ public class TCPServer {
                         mantenimiento = true;
                         System.out.println("[Servidor] Entrando en modo mantenimiento");
                     }
-                    case "mant of" -> {
+                    case "mant off" -> {
                         mantenimiento = false;
                         System.out.println("[Servidor] Desactivando el modo de mantenimiento");
                     }
@@ -86,6 +87,7 @@ class Connection extends Thread {
             out = new DataOutputStream(clientSocket.getOutputStream());
 
             GestorServidor.agregarConexion(this);
+
             this.start();
         } catch (IOException e) {
             System.out.println("Connection:" + e.getMessage());
@@ -138,7 +140,7 @@ class Connection extends Thread {
                                         if (loginExitoso) {
                                             System.out.println("Login correcto para: " + usuario);
                                             out.writeUTF("LOGIN_OK");
-                                            estado = estado.AUTENTIFICADO;
+                                            estado = Estados.AUTENTIFICADO;
                                         } else {
                                             System.out.println("Login fallido para: " + usuario);
                                             out.writeUTF("LOGIN_INCORRECTO");
@@ -185,19 +187,36 @@ class Connection extends Thread {
                                     estado = Estados.CONECTADO;
                                 }
                                 case "LIST_DROOMS" -> {
-
+                                    String[] salones = LectorCSVColumna.leerColumna("salones.csv", 0);
+                                    String rooms;
+                                    rooms = String.join("/", salones);
+                                    out.writeUTF("LIST_ROOMS_OK|" + rooms);
                                 }
                                 case "JOIN" -> {
-
+                                    GestorServidor.unirseASalon(datos, this);
+                                    out.writeUTF("JOIN_OK|" + datos);
                                 }
                                 case "LEAVE" -> {
-
+                                    GestorServidor.salirDeSalon(datos, this);
+                                    out.writeUTF("LEAVE_OK|" + datos);
                                 }
                                 case "MSG" -> {
                                     if (TCPServer.mantenimiento) {
                                         out.writeUTF("SERVIDOR_MANTENIMIENTO");
+                                    } else if (datos.length() > 190) {
+                                        out.writeUTF("MENSAJE_DEMASIADO_LARGO");
                                     } else {
-                                        // logica del mensaje
+                                        String mensajeParaClientes = "MSG_SENT|" + destino + "|" + origen + "|" + datos;
+                                        List<Connection> miembros = GestorServidor.getMiembrosSalon(destino);
+                                        for (Connection c : miembros) {
+                                            try {
+                                                c.out.writeUTF(mensajeParaClientes);
+                                            } catch (IOException e) {
+                                                System.out.println("Error enviando a: " + e.getMessage());
+                                            }
+                                        }
+                                        GestorServidor.contarMensaje(destino);
+                                        out.writeUTF("MSG_SENT");
                                     }
                                 }
                                 case "MD" -> {

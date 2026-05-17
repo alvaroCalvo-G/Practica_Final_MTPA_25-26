@@ -153,12 +153,12 @@ public class InterfazGraficaLogin extends javax.swing.JFrame implements Informac
 
         if (!nombreUsuario.isEmpty()) {
             datosU = nombreUsuario;
+            clienteLogica.setNombreUsuario(datosU);
         }
     }//GEN-LAST:event_usuarioTextActionPerformed
 
     private void ConfirmacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ConfirmacionActionPerformed
         LOG.setDatos(datos());
-
         clienteLogica.mandarComando(LOG);
     }//GEN-LAST:event_ConfirmacionActionPerformed
 
@@ -191,7 +191,7 @@ public class InterfazGraficaLogin extends javax.swing.JFrame implements Informac
         InterfazGraficaPrincipal p = new InterfazGraficaPrincipal(clienteLogica);
 
         p.setVisible(true);
-        
+
         this.dispose();
     }
 
