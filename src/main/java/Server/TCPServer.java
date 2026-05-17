@@ -193,31 +193,30 @@ class Connection extends Thread {
                                     out.writeUTF("LIST_ROOMS_OK|" + rooms);
                                 }
                                 case "JOIN" -> {
+                                    GestorServidor.unirseASalon(datos, this);
                                     out.writeUTF("JOIN_OK|" + datos);
                                 }
                                 case "LEAVE" -> {
+                                    GestorServidor.salirDeSalon(datos, this);
                                     out.writeUTF("LEAVE_OK|" + datos);
                                 }
                                 case "MSG" -> {
                                     if (TCPServer.mantenimiento) {
                                         out.writeUTF("SERVIDOR_MANTENIMIENTO");
+                                    } else if (datos.length() > 190) {
+                                        out.writeUTF("MENSAJE_DEMASIADO_LARGO");
                                     } else {
-                                        if (datos.length() > 190) {
-                                            out.writeUTF("MENSAJE_DEMASIADO_LARGO");
-                                        } else {
-                                            String mensajeParaClientes = "MSG_BROADCAST|" + destino + "|" + origen + "|" + datos;
-
-                                            List<Connection> miembros = GestorServidor.getMiembrosSalon(destino);
-                                            for (Connection c : miembros) {
-                                                try {
-                                                    c.out.writeUTF(mensajeParaClientes);
-                                                } catch (IOException e) {
-                                                    System.out.println("Error enviando a cliente: " + e.getMessage());
-                                                }
+                                        String mensajeParaClientes = "MSG_SENT|" + destino + "|" + origen + "|" + datos;
+                                        List<Connection> miembros = GestorServidor.getMiembrosSalon(destino);
+                                        for (Connection c : miembros) {
+                                            try {
+                                                c.out.writeUTF(mensajeParaClientes);
+                                            } catch (IOException e) {
+                                                System.out.println("Error enviando a: " + e.getMessage());
                                             }
-
-                                            out.writeUTF("MSG_SENT");
                                         }
+                                        GestorServidor.contarMensaje(destino);
+                                        out.writeUTF("MSG_SENT");
                                     }
                                 }
                                 case "MD" -> {

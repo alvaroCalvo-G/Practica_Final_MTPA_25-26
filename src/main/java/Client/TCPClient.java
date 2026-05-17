@@ -154,6 +154,12 @@ public class TCPClient {
                 IUReg.infoBannerChange("El nombre de usuario ya está en uso.");
                 IUReg.infoBannerRed();
             }
+            case "MENSAJE_DEMASIADO_LARGO" -> {
+                notificarTodos("El mensaje supera los 190 caracteres.");
+            }
+            case "SERVIDOR_MANTENIMIENTO" -> {
+                notificarTodos("El servidor esta en mantenimiento.");
+            }
             default -> {
                 if (respuesta.startsWith("REG_OK")) {
                     String clave = respuesta.split("\\|")[1];
@@ -179,6 +185,11 @@ public class TCPClient {
                         out.writeUTF("NOTIFY");
                     } catch (IOException ex) {
                         Logger.getLogger(TCPClient.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                } else if (respuesta.startsWith("MSG_SENT")) {
+                    String[] partes = respuesta.split("\\|");
+                    if (partes.length >= 4 && IUSalon != null) {
+                        IUSalon.recibirMensaje(partes[2], partes[3]);
                     }
                 } else {
                     notificarTodos("FORMATO_INVALIDO: " + respuesta);
