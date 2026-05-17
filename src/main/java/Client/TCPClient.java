@@ -4,6 +4,7 @@ import Client.IU.InterfazGraficaInicio;
 import Client.IU.InterfazGraficaLogin;
 import Client.IU.InterfazGraficaPrincipal;
 import Client.IU.InterfazGraficaRegistro;
+import Client.IU.InterfazGraficaSalon;
 import Client.Intefaces.Informacion;
 import java.net.*;
 import java.io.*;
@@ -30,6 +31,7 @@ public class TCPClient {
     private InterfazGraficaLogin IULog;
     private InterfazGraficaRegistro IUReg;
     private InterfazGraficaPrincipal IUMain;
+    private InterfazGraficaSalon IUSalon;
 
     public void setIULog(InterfazGraficaLogin IULog) {
         this.IULog = IULog;
@@ -41,6 +43,10 @@ public class TCPClient {
 
     public void setIUMain(InterfazGraficaPrincipal IUMain) {
         this.IUMain = IUMain;
+    }
+
+    public void setIUSalon(InterfazGraficaSalon IUSalon) {
+        this.IUSalon = IUSalon;
     }
 
     private List<Informacion> generales = new ArrayList<>();

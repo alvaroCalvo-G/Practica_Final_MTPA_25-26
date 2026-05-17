@@ -18,6 +18,7 @@ public class InterfazGraficaPrincipal extends javax.swing.JFrame implements Info
         leave.setOrigen(clienteLogica.getNombreUsuario());
 
         this.clienteLogica = clienteLogica;
+        
         initComponents();
         clienteLogica.setIUMain(this);
 
@@ -47,6 +48,9 @@ public class InterfazGraficaPrincipal extends javax.swing.JFrame implements Info
         AbandonarButtom = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         ListUnido = new javax.swing.JList<>();
+        salonSeleccionadoBanner = new javax.swing.JLabel();
+        openButton = new javax.swing.JButton();
+        CloseButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -83,6 +87,24 @@ public class InterfazGraficaPrincipal extends javax.swing.JFrame implements Info
         ListUnido.setModel(new javax.swing.DefaultListModel<>());
         jScrollPane2.setViewportView(ListUnido);
 
+        salonSeleccionadoBanner.setFont(new java.awt.Font("Segoe UI", 3, 12)); // NOI18N
+        salonSeleccionadoBanner.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        salonSeleccionadoBanner.setText("SALON SELECCIONADO");
+
+        openButton.setText("Abrir");
+        openButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                openButtonActionPerformed(evt);
+            }
+        });
+
+        CloseButton.setText("Cerrar");
+        CloseButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CloseButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -91,15 +113,25 @@ public class InterfazGraficaPrincipal extends javax.swing.JFrame implements Info
                 .addGap(35, 35, 35)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane2)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jScrollPane1)
-                        .addComponent(AbandonarButtom, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(logoutButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(joinRoom, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(botonLista, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addGap(48, 48, 48)
-                .addComponent(BienvenidoBanner, javax.swing.GroupLayout.PREFERRED_SIZE, 623, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1)
+                    .addComponent(AbandonarButtom, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(logoutButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(joinRoom, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(botonLista, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(48, 48, 48)
+                        .addComponent(BienvenidoBanner, javax.swing.GroupLayout.PREFERRED_SIZE, 623, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(openButton, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(CloseButton, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(salonSeleccionadoBanner, javax.swing.GroupLayout.PREFERRED_SIZE, 311, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(157, 157, 157))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -111,7 +143,14 @@ public class InterfazGraficaPrincipal extends javax.swing.JFrame implements Info
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(salonSeleccionadoBanner, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(openButton)
+                            .addComponent(CloseButton))))
                 .addGap(29, 29, 29)
                 .addComponent(joinRoom)
                 .addGap(12, 12, 12)
@@ -159,6 +198,15 @@ public class InterfazGraficaPrincipal extends javax.swing.JFrame implements Info
         leave.setDatos(salonSeleccionado);
         clienteLogica.mandarComando(leave);
     }//GEN-LAST:event_AbandonarButtomActionPerformed
+
+    private void openButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openButtonActionPerformed
+        InterfazGraficaSalon home = new InterfazGraficaSalon(clienteLogica);
+        home.setVisible(true);
+    }//GEN-LAST:event_openButtonActionPerformed
+
+    private void CloseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CloseButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_CloseButtonActionPerformed
 
     public void unirseASalon(String salon) {
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
@@ -233,6 +281,7 @@ public class InterfazGraficaPrincipal extends javax.swing.JFrame implements Info
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton AbandonarButtom;
     private javax.swing.JLabel BienvenidoBanner;
+    private javax.swing.JButton CloseButton;
     private javax.swing.JList<String> ListUnido;
     private javax.swing.JList<String> Lista;
     private javax.swing.JButton botonLista;
@@ -240,6 +289,8 @@ public class InterfazGraficaPrincipal extends javax.swing.JFrame implements Info
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JButton joinRoom;
     private javax.swing.JButton logoutButton;
+    private javax.swing.JButton openButton;
+    private javax.swing.JLabel salonSeleccionadoBanner;
     // End of variables declaration//GEN-END:variables
 
 }
