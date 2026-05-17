@@ -162,6 +162,11 @@ public class TCPClient {
                     if (IUMain != null && partes.length > 1) {
                         IUMain.unirseASalon(partes[1]);
                     }
+                } else if (respuesta.startsWith("LEAVE_OK")) {
+                    String[] partes = respuesta.split("\\|");
+                    if (IUMain != null && partes.length > 1) {
+                        IUMain.abandonarSalon(partes[1]);
+                    }
                 } else {
                     notificarTodos("FORMATO_INVALIDO: " + respuesta);
                 }

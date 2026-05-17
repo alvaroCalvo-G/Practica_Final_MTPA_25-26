@@ -87,7 +87,7 @@ class Connection extends Thread {
             out = new DataOutputStream(clientSocket.getOutputStream());
 
             GestorServidor.agregarConexion(this);
-            
+
             this.start();
         } catch (IOException e) {
             System.out.println("Connection:" + e.getMessage());
@@ -196,7 +196,7 @@ class Connection extends Thread {
                                     out.writeUTF("JOIN_OK|" + datos);
                                 }
                                 case "LEAVE" -> {
-
+                                    out.writeUTF("LEAVE_OK|" + datos);
                                 }
                                 case "MSG" -> {
                                     if (TCPServer.mantenimiento) {

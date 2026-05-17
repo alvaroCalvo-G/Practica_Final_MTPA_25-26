@@ -10,10 +10,13 @@ public class InterfazGraficaPrincipal extends javax.swing.JFrame implements Info
     private TCPClient clienteLogica;
     private Comando MostrarRooms = new Comando("LIST_DROOMS", null, "Server", null);
     private Comando join = new Comando("JOIN", null, "Server", null);
+    private Comando leave = new Comando("LEAVE", null, "Server", null);
 
     public InterfazGraficaPrincipal(TCPClient clienteLogica) {
         MostrarRooms.setOrigen(clienteLogica.getNombreUsuario());
         join.setOrigen(clienteLogica.getNombreUsuario());
+        leave.setOrigen(clienteLogica.getNombreUsuario());
+
         this.clienteLogica = clienteLogica;
         initComponents();
         clienteLogica.setIUMain(this);
@@ -71,6 +74,11 @@ public class InterfazGraficaPrincipal extends javax.swing.JFrame implements Info
         logoutButton.setText("logout");
 
         AbandonarButtom.setText("Abandonar");
+        AbandonarButtom.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AbandonarButtomActionPerformed(evt);
+            }
+        });
 
         ListUnido.setModel(new javax.swing.DefaultListModel<>());
         jScrollPane2.setViewportView(ListUnido);
@@ -140,6 +148,18 @@ public class InterfazGraficaPrincipal extends javax.swing.JFrame implements Info
         clienteLogica.mandarComando(join);
     }//GEN-LAST:event_joinRoomActionPerformed
 
+    private void AbandonarButtomActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AbandonarButtomActionPerformed
+        String salonSeleccionado = ListUnido.getSelectedValue();
+
+        if (salonSeleccionado == null) {
+            ventanaEmergente("Selecciona un salon de la lista para abandonarlo.");
+            return;
+        }
+
+        leave.setDatos(salonSeleccionado);
+        clienteLogica.mandarComando(leave);
+    }//GEN-LAST:event_AbandonarButtomActionPerformed
+
     public void unirseASalon(String salon) {
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             @Override
@@ -154,6 +174,24 @@ public class InterfazGraficaPrincipal extends javax.swing.JFrame implements Info
                 Lista.repaint();
                 ListUnido.revalidate();
                 ListUnido.repaint();
+            }
+        });
+    }
+    
+    public void abandonarSalon(String salon) {
+        javax.swing.SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                javax.swing.DefaultListModel<String> RoomUnidos = (javax.swing.DefaultListModel<String>) ListUnido.getModel();
+                RoomUnidos.removeElement(salon);
+
+                javax.swing.DefaultListModel<String> RoomDisponibles = (javax.swing.DefaultListModel<String>) Lista.getModel();
+                RoomDisponibles.addElement(salon);
+
+                ListUnido.revalidate();
+                ListUnido.repaint();
+                Lista.revalidate();
+                Lista.repaint();
             }
         });
     }
