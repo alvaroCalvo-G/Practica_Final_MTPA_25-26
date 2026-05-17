@@ -47,11 +47,7 @@ public class InterfazGraficaPrincipal extends javax.swing.JFrame implements Info
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        Lista.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
+        Lista.setModel(new javax.swing.DefaultListModel<>());
         jScrollPane1.setViewportView(Lista);
 
         botonLista.setText("Salones disponibles");
@@ -76,11 +72,7 @@ public class InterfazGraficaPrincipal extends javax.swing.JFrame implements Info
 
         AbandonarButtom.setText("Abandonar");
 
-        ListUnido.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
+        ListUnido.setModel(new javax.swing.DefaultListModel<>());
         jScrollPane2.setViewportView(ListUnido);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -90,16 +82,16 @@ public class InterfazGraficaPrincipal extends javax.swing.JFrame implements Info
             .addGroup(layout.createSequentialGroup()
                 .addGap(35, 35, 35)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(jScrollPane1)
                         .addComponent(AbandonarButtom, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(logoutButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(joinRoom, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(botonLista, javax.swing.GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE)))
+                        .addComponent(botonLista, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGap(48, 48, 48)
                 .addComponent(BienvenidoBanner, javax.swing.GroupLayout.PREFERRED_SIZE, 623, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(54, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -149,18 +141,37 @@ public class InterfazGraficaPrincipal extends javax.swing.JFrame implements Info
     }//GEN-LAST:event_joinRoomActionPerformed
 
     public void unirseASalon(String salon) {
-        javax.swing.DefaultListModel<String> RoomDisponibles = (javax.swing.DefaultListModel<String>) Lista.getModel();
-        RoomDisponibles.removeElement(salon);
-        javax.swing.DefaultListModel<String> RoomUnidos = (javax.swing.DefaultListModel<String>) ListUnido.getModel();
-        RoomUnidos.addElement(salon);
+        javax.swing.SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                javax.swing.DefaultListModel<String> RoomDisponibles = (javax.swing.DefaultListModel<String>) Lista.getModel();
+                RoomDisponibles.removeElement(salon);
+
+                javax.swing.DefaultListModel<String> RoomUnidos = (javax.swing.DefaultListModel<String>) ListUnido.getModel();
+                RoomUnidos.addElement(salon);
+
+                Lista.revalidate();
+                Lista.repaint();
+                ListUnido.revalidate();
+                ListUnido.repaint();
+            }
+        });
     }
 
     public void actualizarSalones(String[] salones) {
-        javax.swing.DefaultListModel<String> modelo = new javax.swing.DefaultListModel<>();
-        for (String salon : salones) {
-            modelo.addElement(salon);
-        }
-        Lista.setModel(modelo);
+        javax.swing.SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                javax.swing.DefaultListModel<String> modelo = new javax.swing.DefaultListModel<>();
+                for (String salon : salones) {
+                    modelo.addElement(salon);
+                }
+                Lista.setModel(modelo);
+
+                Lista.revalidate();
+                Lista.repaint();
+            }
+        });
     }
 
     public static void main(String args[]) {

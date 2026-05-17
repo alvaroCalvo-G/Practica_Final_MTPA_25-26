@@ -146,13 +146,6 @@ public class TCPClient {
                 IUReg.infoBannerChange("El nombre de usuario ya está en uso.");
                 IUReg.infoBannerRed();
             }
-            case "JOIN_OK" -> {
-                String[] partes = respuesta.split("\\|");
-                if (IUMain != null && partes.length > 1) {
-                    IUMain.unirseASalon(partes[1]);
-                }
-            }
-
             default -> {
                 if (respuesta.startsWith("REG_OK")) {
                     String clave = respuesta.split("\\|")[1];
@@ -164,8 +157,13 @@ public class TCPClient {
                     if (IUMain != null) {
                         IUMain.actualizarSalones(salones);
                     }
+                } else if (respuesta.startsWith("JOIN_OK")) {
+                    String[] partes = respuesta.split("\\|");
+                    if (IUMain != null && partes.length > 1) {
+                        IUMain.unirseASalon(partes[1]);
+                    }
                 } else {
-                    notificarTodos("Respuesta: " + respuesta);
+                    notificarTodos("FORMATO_INVALIDO: " + respuesta);
                 }
 
             }

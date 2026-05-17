@@ -54,7 +54,7 @@ public class TCPServer {
                         mantenimiento = true;
                         System.out.println("[Servidor] Entrando en modo mantenimiento");
                     }
-                    case "mant of" -> {
+                    case "mant off" -> {
                         mantenimiento = false;
                         System.out.println("[Servidor] Desactivando el modo de mantenimiento");
                     }
@@ -87,6 +87,7 @@ class Connection extends Thread {
             out = new DataOutputStream(clientSocket.getOutputStream());
 
             GestorServidor.agregarConexion(this);
+            
             this.start();
         } catch (IOException e) {
             System.out.println("Connection:" + e.getMessage());
@@ -139,7 +140,7 @@ class Connection extends Thread {
                                         if (loginExitoso) {
                                             System.out.println("Login correcto para: " + usuario);
                                             out.writeUTF("LOGIN_OK");
-                                            estado = estado.AUTENTIFICADO;
+                                            estado = Estados.AUTENTIFICADO;
                                         } else {
                                             System.out.println("Login fallido para: " + usuario);
                                             out.writeUTF("LOGIN_INCORRECTO");
