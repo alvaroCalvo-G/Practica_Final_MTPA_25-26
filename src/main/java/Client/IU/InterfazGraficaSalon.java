@@ -7,11 +7,14 @@ import javax.swing.JOptionPane;
 public class InterfazGraficaSalon extends javax.swing.JFrame implements Informacion{
 
     private TCPClient clienteLogica;
+    private String salon;
     
-    public InterfazGraficaSalon(TCPClient clienteLogica) {
+    public InterfazGraficaSalon(TCPClient clienteLogica, String salon) {
         this.clienteLogica = clienteLogica;
+        this.salon = salon;
         
         initComponents();
+        setTitle(salon);
         clienteLogica.setIUSalon(this);
         
         clienteLogica.addListener(this);
@@ -49,7 +52,7 @@ public class InterfazGraficaSalon extends javax.swing.JFrame implements Informac
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 TCPClient cliente = new TCPClient();
-                new InterfazGraficaSalon(cliente).setVisible(true);
+                new InterfazGraficaSalon(cliente, "Salon").setVisible(true);
             }
         });
     }

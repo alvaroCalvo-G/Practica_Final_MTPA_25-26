@@ -11,7 +11,8 @@ public class InterfazGraficaPrincipal extends javax.swing.JFrame implements Info
     private Comando MostrarRooms = new Comando("LIST_DROOMS", null, "Server", null);
     private Comando join = new Comando("JOIN", null, "Server", null);
     private Comando leave = new Comando("LEAVE", null, "Server", null);
-
+    private java.util.Map<String, InterfazGraficaSalon> salonesAbiertos = new java.util.HashMap<>();
+    
     public InterfazGraficaPrincipal(TCPClient clienteLogica) {
         MostrarRooms.setOrigen(clienteLogica.getNombreUsuario());
         join.setOrigen(clienteLogica.getNombreUsuario());
@@ -200,8 +201,29 @@ public class InterfazGraficaPrincipal extends javax.swing.JFrame implements Info
     }//GEN-LAST:event_AbandonarButtomActionPerformed
 
     private void openButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openButtonActionPerformed
-        InterfazGraficaSalon home = new InterfazGraficaSalon(clienteLogica);
-        home.setVisible(true);
+        String salon = ListUnido.getSelectedValue();
+
+        if (salon == null) {
+            ventanaEmergente("Selecciona un salon de tu lista para abrirlo.");
+            return;
+        }
+
+        if (salonesAbiertos.containsKey(salon)) {
+            salonesAbiertos.get(salon).toFront();  // si ya esta abierto lo trae al frente
+            return;
+        }
+
+        InterfazGraficaSalon ventanaSalon = new InterfazGraficaSalon(clienteLogica, salon);
+        salonesAbiertos.put(salon, ventanaSalon);
+        ventanaSalon.setVisible(true);
+
+        // Al cerrar la ventana del salon se elimina del mapa
+        ventanaSalon.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                salonesAbiertos.remove(salon);
+            }
+        });
     }//GEN-LAST:event_openButtonActionPerformed
 
     private void CloseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CloseButtonActionPerformed
