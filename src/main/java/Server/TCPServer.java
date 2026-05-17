@@ -192,7 +192,7 @@ class Connection extends Thread {
                                     out.writeUTF("LIST_ROOMS_OK|" + rooms);
                                 }
                                 case "JOIN" -> {
-
+                                    out.writeUTF("JOIN_OK|" + datos);
                                 }
                                 case "LEAVE" -> {
 

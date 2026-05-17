@@ -15,9 +15,9 @@ public class TCPClient {
     private Socket s = null;
     private DataInputStream in = null;
     private DataOutputStream out = null;
-    
+
     String nombreUsuario = null;
-    
+
     public String getNombreUsuario() {
         return nombreUsuario;
     }
@@ -42,7 +42,7 @@ public class TCPClient {
     public void setIUMain(InterfazGraficaPrincipal IUMain) {
         this.IUMain = IUMain;
     }
-    
+
     private List<Informacion> generales = new ArrayList<>();
 
     public void addListener(Informacion listener) {
@@ -69,7 +69,7 @@ public class TCPClient {
             s = new Socket("localhost", serverPort);
             in = new DataInputStream(s.getInputStream());
             out = new DataOutputStream(s.getOutputStream());
-            
+
             iniciarEscucha();
 
         } catch (UnknownHostException e) {
@@ -146,18 +146,25 @@ public class TCPClient {
                 IUReg.infoBannerChange("El nombre de usuario ya está en uso.");
                 IUReg.infoBannerRed();
             }
+            case "JOIN_OK" -> {
+                String[] partes = respuesta.split("\\|");
+                if (IUMain != null && partes.length > 1) {
+                    IUMain.unirseASalon(partes[1]);
+                }
+            }
+
             default -> {
                 if (respuesta.startsWith("REG_OK")) {
                     String clave = respuesta.split("\\|")[1];
                     IUReg.infoBannerChange("Registro exitoso. Tu clave es: " + clave);
                     IUReg.infoBannerGreen();
-                }else if(respuesta.startsWith("LIST_ROOMS_OK")){
+                } else if (respuesta.startsWith("LIST_ROOMS_OK")) {
                     String[] partes = respuesta.split("\\|");
                     String[] salones = partes[1].split("/");
                     if (IUMain != null) {
                         IUMain.actualizarSalones(salones);
                     }
-                }else {
+                } else {
                     notificarTodos("Respuesta: " + respuesta);
                 }
 
