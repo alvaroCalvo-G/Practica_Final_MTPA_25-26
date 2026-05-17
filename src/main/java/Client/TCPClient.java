@@ -10,6 +10,8 @@ import java.net.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class TCPClient {
 
@@ -169,9 +171,14 @@ public class TCPClient {
                         IUMain.unirseASalon(partes[1]);
                     }
                 } else if (respuesta.startsWith("LEAVE_OK")) {
-                    String[] partes = respuesta.split("\\|");
-                    if (IUMain != null && partes.length > 1) {
-                        IUMain.abandonarSalon(partes[1]);
+                    try {
+                        String[] partes = respuesta.split("\\|");
+                        if (IUMain != null && partes.length > 1) {
+                            IUMain.abandonarSalon(partes[1]);
+                        }
+                        out.writeUTF("NOTIFY");
+                    } catch (IOException ex) {
+                        Logger.getLogger(TCPClient.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 } else {
                     notificarTodos("FORMATO_INVALIDO: " + respuesta);

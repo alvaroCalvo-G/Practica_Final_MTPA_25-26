@@ -202,7 +202,22 @@ class Connection extends Thread {
                                     if (TCPServer.mantenimiento) {
                                         out.writeUTF("SERVIDOR_MANTENIMIENTO");
                                     } else {
-                                        // logica del mensaje
+                                        if (datos.length() > 190) {
+                                            out.writeUTF("MENSAJE_DEMASIADO_LARGO");
+                                        } else {
+                                            String mensajeParaClientes = "MSG_BROADCAST|" + destino + "|" + origen + "|" + datos;
+
+                                            List<Connection> miembros = GestorServidor.getMiembrosSalon(destino);
+                                            for (Connection c : miembros) {
+                                                try {
+                                                    c.out.writeUTF(mensajeParaClientes);
+                                                } catch (IOException e) {
+                                                    System.out.println("Error enviando a cliente: " + e.getMessage());
+                                                }
+                                            }
+
+                                            out.writeUTF("MSG_SENT");
+                                        }
                                     }
                                 }
                                 case "MD" -> {
